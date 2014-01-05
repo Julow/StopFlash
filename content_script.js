@@ -6,46 +6,66 @@
  * content_script.js
  */
 
+// class FlashFinder
 function FlashFinder()
 {
     this.flashElements = [];
-
-    var elements = document.getElementsByTagName('*');
-
-    for(var i = 0, e; i < elements.length; ++i)
+}
+// function add(NodeList elements)
+FlashFinder.prototype.add = function(elements)
+{
+    for(var i = 0, e, f; i < elements.length; ++i)
     {
         e = elements[i];
+        f = this.get(e);
 
-        if(e.nodeName === 'OBJECT')
+        if(f == null && (e.nodeName === 'OBJECT' || e.nodeName === 'EMBED'))
         {
-            this.flashElements.push(new FlashElement(e));
+            var fe = new FlashElement(e);
+
+            this.flashElements.push(fe);
+
+            fe.block();
         }
     }
-}
-FlashFinder.prototype.blockall = function()
+};
+// function remove(NodeList elements)
+FlashFinder.prototype.remove = function(elements)
 {
-    for(var i = 0; i < this.flashElements.length; ++i)
+    for(var i = 0, f; i < elements.length; ++i)
     {
-        this.flashElements[i].block();
+        f = this.get(elements[i]);
+
+        if(f != null)
+        {
+            f.remove();
+        }
     }
 };
-FlashFinder.prototype.unblockall = function()
+// function get(HTMLElement element)
+FlashFinder.prototype.get = function(element)
 {
     for(var i = 0; i < this.flashElements.length; ++i)
     {
-        this.flashElements[i].unblock();
+        if(element == this.flashElements[i].element)
+        {
+            return this.flashElements[i];
+        }
     }
+
+    return null;
 };
 
 var styles = [
     'float', 'clear',
     'position', 'top', 'left',
-    'display', 'width', 'height',
+    'width', 'height',
     'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
     'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
     'border-top', 'border-right', 'border-bottom', 'border-left'
 ]; // :Array<String>
 
+// class FlashElement
 function FlashElement(element)
 {
     this.element = element; // :HTMLElement
@@ -54,7 +74,8 @@ function FlashElement(element)
 
     var self = this;
 
-    this.replacement = new Builder('div')
+    var replacement = new Builder('div')
+        .css('display', 'block')
         .css('cursor', 'pointer')
         .css('min-width', '64px')
         .css('min-height', '64px')
@@ -66,9 +87,12 @@ function FlashElement(element)
 
     for(var i = 0; i < styles.length; ++i)
     {
-        this.replacement.css(styles[i], Builder.getStyle(element, styles[i]));
+        replacement.css(styles[i], Builder.getStyle(element, styles[i]));
     }
+
+    this.replacement = replacement.node;
 }
+// function block():void
 FlashElement.prototype.block = function()
 {
     this.parent.removeChild(this.element);
@@ -82,6 +106,7 @@ FlashElement.prototype.block = function()
         this.parent.appendChild(this.replacement);
     }
 };
+// function unblock():void
 FlashElement.prototype.unblock = function()
 {
     this.parent.removeChild(this.replacement);
@@ -95,8 +120,41 @@ FlashElement.prototype.unblock = function()
         this.parent.appendChild(this.element);
     }
 };
+// function remove():void
+FlashElement.prototype.remove = function()
+{
+    this.parent.removeChild(this.replacement);
+
+    this.parent.removeChild(this.element);
+};
 
 // main
-var finder = new FlashFinder();
+var main = function()
+{
+    var finder = new FlashFinder();
 
-finder.blockall();
+    finder.add(document.getElementsByTagName('OBJECT'));
+    finder.add(document.getElementsByTagName('EMBED'));
+
+    var observer = new MutationObserver(function(changes)
+    {
+        for(var i = 0, c; i < changes.length; ++i)
+        {
+            c = changes[i];
+
+            if(c.addedNodes != null)
+            {
+                finder.add(c.addedNodes);
+            }
+
+            if(c.removedNodes != null)
+            {
+                finder.remove(c.removedNodes);
+            }
+        }
+    });
+
+    observer.observe(document, {childList: true})
+};
+
+document.addEventListener('DOMContentLoaded', main, false);
