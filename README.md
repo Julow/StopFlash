@@ -1,4 +1,4 @@
-# StopFlash
+# ![StopFlash logo](/icons/stopflash_32.png) StopFlash
 
 Bloque les objets flash pour accélérer le chargement des pages.
 Réactivez flash quand vous en avez besoin !
