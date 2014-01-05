@@ -154,7 +154,7 @@ var main = function()
         }
     });
 
-    observer.observe(document, {childList: true})
+    observer.observe(document, {childList: true, subtree: true});
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
