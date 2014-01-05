@@ -22,6 +22,20 @@ function FlashFinder()
         }
     }
 }
+FlashFinder.prototype.blockall = function()
+{
+    for(var i = 0; i < this.flashElements.length; ++i)
+    {
+        this.flashElements[i].block();
+    }
+};
+FlashFinder.prototype.unblockall = function()
+{
+    for(var i = 0; i < this.flashElements.length; ++i)
+    {
+        this.flashElements[i].unblock();
+    }
+};
 
 var styles = [
     'float', 'clear',
@@ -83,4 +97,6 @@ FlashElement.prototype.unblock = function()
 };
 
 // main
-new FlashFinder();
+var finder = new FlashFinder();
+
+finder.blockall();
