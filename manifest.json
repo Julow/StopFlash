@@ -27,7 +27,8 @@
         {
             "matches": ["\u003Call_urls\u003E"],
             "all_frames": true,
-            "js": ["libs/Builder.js/Builder.js", "content_script.js"]
+            "js": ["libs/Builder.js/Builder.js", "content_script.js"],
+            "run_at": "document_start"
         }
     ],
 
