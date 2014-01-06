@@ -11,8 +11,7 @@ function StopFlashUI(elements)
 {
     this.super('div');
 
-    this.content = new Builder('div')
-        .className('content');
+    this.tabs = new StopFlashTabs();
 
     this.append(new Builder('div')
             .className('head')
@@ -25,12 +24,19 @@ function StopFlashUI(elements)
                 .text('Whitelist'))
             .append(new Builder('a')
                 .text('Options')))
-        .append(this.content)
+        .append(this.tabs)
         .append(new Builder('div')
             .className('foot')
             .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>'))
 }
 fus.extend(StopFlashUI, Builder);
+
+// class StopFlashTabs extends Builder
+function StopFlashTabs()
+{
+    this.super('div');
+}
+fus.extend(StopFlashTabs, Builder);
 
 // main
 var main = function(elements)
