@@ -11,7 +11,16 @@ function StopFlashUI(elements)
 {
     this.super('div');
 
-    this.tabs = new StopFlashTabs();
+    this.content = new Builder('div')
+        .append(new Builder('div')
+            .className('tab')
+            .text('Home tab'))
+        .append(new Builder('div')
+            .className('tab')
+            .text('Whitelist tab'))
+        .append(new Builder('div')
+            .className('tab')
+            .text('Options tab'));
 
     this.append(new Builder('div')
             .className('head')
@@ -19,24 +28,29 @@ function StopFlashUI(elements)
         .append(new Builder('div')
             .className('menu')
             .append(new Builder('a')
-                .text('Home'))
+                .text('Home')
+                .event('click', function()
+                {
+                    self.content.css('left', '-300px');
+                }))
             .append(new Builder('a')
-                .text('Whitelist'))
+                .text('Whitelist')
+                .event('click', function()
+                {
+                    self.content.css('left', '-600px');
+                }))
             .append(new Builder('a')
-                .text('Options')))
-        .append(this.tabs)
+                .text('Options')
+                .event('click', function()
+                {
+                    self.content.css('left', '-900px');
+                })))
+        .append(this.content)
         .append(new Builder('div')
             .className('foot')
             .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>'))
 }
 fus.extend(StopFlashUI, Builder);
-
-// class StopFlashTabs extends Builder
-function StopFlashTabs()
-{
-    this.super('div');
-}
-fus.extend(StopFlashTabs, Builder);
 
 // main
 var main = function(elements)
