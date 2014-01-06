@@ -13,3 +13,16 @@ a{
 a:hover{
     text-decoration:none;
 }
+.head{
+}
+.menu{
+}
+.content{
+    position:relative;
+    width:900px;
+    transition:margin-left .4s;
+}
+    .tab{
+        display:inline-block;
+        width:300px;
+    }
