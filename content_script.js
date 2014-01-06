@@ -151,10 +151,10 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    var finder = new FlashCollection();
+    var elements = new FlashCollection();
 
-    finder.add(document.getElementsByTagName('OBJECT'));
-    finder.add(document.getElementsByTagName('EMBED'));
+    elements.add(document.getElementsByTagName('OBJECT'));
+    elements.add(document.getElementsByTagName('EMBED'));
 
     var observer = new MutationObserver(function(changes)
     {
@@ -164,12 +164,12 @@ var main = function()
 
             if(c.addedNodes != null)
             {
-                finder.add(c.addedNodes);
+                elements.add(c.addedNodes);
             }
 
             if(c.removedNodes != null)
             {
-                finder.remove(c.removedNodes);
+                elements.remove(c.removedNodes);
             }
         }
     });
