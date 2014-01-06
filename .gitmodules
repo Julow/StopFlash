@@ -1,3 +1,6 @@
 [submodule "libs/Builder.js"]
 	path = libs/Builder.js
 	url = git@github.com:JWhile/Builder.js.git
+[submodule "libs/Fus"]
+	path = libs/Fus
+	url = git@github.com:JWhile/Fus.git
