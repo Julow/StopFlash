@@ -6,13 +6,13 @@
  * content_script.js
  */
 
-// class FlashFinder
-function FlashFinder()
+// class FlashCollection
+function FlashCollection()
 {
     this.flashElements = [];
 }
 // function add(NodeList elements)
-FlashFinder.prototype.add = function(elements)
+FlashCollection.prototype.add = function(elements)
 {
     for(var i = 0, e, f; i < elements.length; ++i)
     {
@@ -30,7 +30,7 @@ FlashFinder.prototype.add = function(elements)
     }
 };
 // function remove(NodeList elements)
-FlashFinder.prototype.remove = function(elements)
+FlashCollection.prototype.remove = function(elements)
 {
     for(var i = 0, f; i < elements.length; ++i)
     {
@@ -43,7 +43,7 @@ FlashFinder.prototype.remove = function(elements)
     }
 };
 // function get(HTMLElement element)
-FlashFinder.prototype.get = function(element)
+FlashCollection.prototype.get = function(element)
 {
     for(var i = 0; i < this.flashElements.length; ++i)
     {
@@ -131,7 +131,7 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    var finder = new FlashFinder();
+    var finder = new FlashCollection();
 
     finder.add(document.getElementsByTagName('OBJECT'));
     finder.add(document.getElementsByTagName('EMBED'));
