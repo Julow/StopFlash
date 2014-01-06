@@ -14,18 +14,32 @@ function FlashCollection()
 // function add(NodeList elements)
 FlashCollection.prototype.add = function(elements)
 {
-    for(var i = 0, e, f; i < elements.length; ++i)
+    for(var i = 0, e; i < elements.length; ++i)
     {
         e = elements[i];
-        f = this.get(e);
 
-        if(f == null && (e.nodeName === 'OBJECT' || e.nodeName === 'EMBED'))
+        if(isFlash(e))
         {
-            var fe = new FlashElement(e);
+            var parent = e;
 
-            this.flashElements.push(fe);
+            while(parent = parent.parentNode)
+            {
+                if(isFlash(parent))
+                {
+                    e = parent;
+                }
+            }
 
-            fe.block();
+            var f = this.get(e);
+
+            if(f == null)
+            {
+                f = new FlashElement(e);
+
+                this.flashElements.push(f);
+
+                f.block();
+            }
         }
     }
 };
