@@ -71,6 +71,26 @@ StopFlashTabs.prototype.addTab = function(builder)
 
     return this;
 };
+// function setTab(int index):void
+StopFlashTabs.prototype.setTab = function(index)
+{
+    this.css('margin-left', '-'+ (index * 300) +'px');
+
+    this.tabs[index].css('position', '');
+
+    var self = this;
+
+    setTimeout(function()
+    {
+        for(var i = 0; i < self.tabs.length; ++i)
+        {
+            if(i !== index)
+            {
+                self.tabs[i].css('position', 'absolute');
+            }
+        }
+    }, 400);
+};
 fus.extend(StopFlashTabs, Builder);
 
 // main
