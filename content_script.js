@@ -175,6 +175,14 @@ var main = function()
     });
 
     observer.observe(document, {childList: true, subtree: true});
+
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
+    {
+        if(request.getElements === 'stopflash')
+        {
+            sendResponse(elements);
+        }
+    });
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
