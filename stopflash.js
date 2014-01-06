@@ -58,10 +58,20 @@ fus.extend(StopFlashUI, Builder);
 // class StopFlashTabs extends Builder
 function StopFlashTabs()
 {
-    this.tabs = [];
-}
-fus.extend(StopFlashTabs, Builder);
+    this.super('div');
 
+    this.tabs = []; // :Array<Builder>
+}
+// function addTab(Builder builder)@Chainable
+StopFlashTabs.prototype.addTab = function(builder)
+{
+    this.tabs.push(builder
+        .className('tab')
+        .insert(this));
+
+    return this;
+};
+fus.extend(StopFlashTabs, Builder);
 
 // main
 var main = function(elements)
