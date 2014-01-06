@@ -20,9 +20,11 @@ a:hover{
 .content{
     position:relative;
     width:900px;
-    transition:margin-left .4s;
+    transition-property:left,height;
+    transition-duration:.4s;
 }
     .tab{
+        position:absolute;
         display:inline-block;
         width:300px;
     }
