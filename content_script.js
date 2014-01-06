@@ -37,9 +37,9 @@ FlashCollection.prototype.add = function(elements)
                 f = new FlashElement(e);
 
                 this.flashElements.push(f);
-
-                f.block();
             }
+
+            f.block();
         }
     }
 };
