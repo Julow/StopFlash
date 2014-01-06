@@ -70,6 +70,11 @@ StopFlashTabs.prototype.addTab = function(builder)
         .css('left', (this.tabs.length * 300) +'px')
         .insert(this));
 
+    if(this.tabs.length === 1)
+    {
+        this.setTab(0);
+    }
+
     return this;
 };
 // function setTab(int index):void
