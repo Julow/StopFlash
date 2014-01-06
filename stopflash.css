@@ -1,0 +1,15 @@
+body{
+    width:300px;
+    margin:0;
+    background:#333 url('icons/stopflash_64.png') center center no-repeat;
+    font-family:sans-serif;
+    font-size:14px;
+    color:#a9a9a9;
+}
+a{
+    cursor:pointer;
+    color:#a9a9a9;
+}
+a:hover{
+    text-decoration:none;
+}
