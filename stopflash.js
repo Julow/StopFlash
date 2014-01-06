@@ -11,15 +11,15 @@ function StopFlashUI(elements)
 {
     this.super('div');
 
-    this.content = new Builder('div')
+    this.content = new StopFlashTabs()
         .className('content')
-        .append(new Builder('div')
+        .addTab(new Builder('div')
             .className('tab')
             .text('Home tab'))
-        .append(new Builder('div')
+        .addTab(new Builder('div')
             .className('tab')
             .text('Whitelist tab'))
-        .append(new Builder('div')
+        .addTab(new Builder('div')
             .className('tab')
             .text('Options tab'));
 
@@ -34,19 +34,19 @@ function StopFlashUI(elements)
                 .text('Home')
                 .event('click', function()
                 {
-                    self.content.css('margin-left', '0px');
+                    self.content.setTab(0);
                 }))
             .append(new Builder('a')
                 .text('Whitelist')
                 .event('click', function()
                 {
-                    self.content.css('margin-left', '-300px');
+                    self.content.setTab(1);
                 }))
             .append(new Builder('a')
                 .text('Options')
                 .event('click', function()
                 {
-                    self.content.css('margin-left', '-600px');
+                    self.content.setTab(2);
                 })))
         .append(this.content)
         .append(new Builder('div')
