@@ -55,6 +55,14 @@ function StopFlashUI(elements)
 }
 fus.extend(StopFlashUI, Builder);
 
+// class StopFlashTabs extends Builder
+function StopFlashTabs()
+{
+    this.tabs = [];
+}
+fus.extend(StopFlashTabs, Builder);
+
+
 // main
 var main = function(elements)
 {
