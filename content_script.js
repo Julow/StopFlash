@@ -15,7 +15,7 @@ var isFlash = function(element)
 // class FlashCollection
 function FlashCollection()
 {
-    this.flashElements = [];
+    this.flashElements = []; // :Array<FlashElement>
 }
 // function add(NodeList elements)
 FlashCollection.prototype.add = function(elements)
