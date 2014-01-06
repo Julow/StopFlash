@@ -75,7 +75,8 @@ StopFlashTabs.prototype.addTab = function(builder)
 // function setTab(int index):void
 StopFlashTabs.prototype.setTab = function(index)
 {
-    this.css('left', '-'+ (index * 300) +'px');
+    this.css('left', '-'+ (index * 300) +'px')
+        .css('height', Builder.getStyle(this.tabs[index], 'height'));
 };
 fus.extend(StopFlashTabs, Builder);
 
