@@ -6,6 +6,12 @@
  * content_script.js
  */
 
+// function isFlash(HTMLElement element):boolean
+var isFlash = function(element)
+{
+    return (element.nodeName === 'OBJECT' || element.nodeName === 'EMBED');
+};
+
 // class FlashCollection
 function FlashCollection()
 {
