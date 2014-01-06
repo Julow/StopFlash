@@ -67,6 +67,7 @@ StopFlashTabs.prototype.addTab = function(builder)
 {
     this.tabs.push(builder
         .className('tab')
+        .css('left', (this.tabs.length * 300) +'px')
         .insert(this));
 
     return this;
@@ -74,22 +75,7 @@ StopFlashTabs.prototype.addTab = function(builder)
 // function setTab(int index):void
 StopFlashTabs.prototype.setTab = function(index)
 {
-    this.css('margin-left', '-'+ (index * 300) +'px');
-
-    this.tabs[index].css('position', '');
-
-    var self = this;
-
-    setTimeout(function()
-    {
-        for(var i = 0; i < self.tabs.length; ++i)
-        {
-            if(i !== index)
-            {
-                self.tabs[i].css('position', 'absolute');
-            }
-        }
-    }, 400);
+    this.css('left', '-'+ (index * 300) +'px');
 };
 fus.extend(StopFlashTabs, Builder);
 
