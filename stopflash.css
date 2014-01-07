@@ -18,6 +18,24 @@ a:hover{
     border-bottom:1px solid #161616;
     transition:color .2s;
 }
+    .logo{
+        line-height:14px;
+    }
+        .logo b{
+            font-size:16px;
+            transition:color .2s;
+        }
+         .head:hover .logo b{
+             color:#e9e9e9;
+         }
+        .logo span{
+            opacity:0;
+            font-size:10px;
+            transition:opacity .3s;
+        }
+         .head:hover .logo span{
+            opacity:1;
+         }
 .menu{
     background:#3a3a3a;
     box-shadow:0 0 7px #111;
