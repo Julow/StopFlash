@@ -148,9 +148,15 @@ FlashElement.prototype.unblock = function()
 // function remove():void
 FlashElement.prototype.remove = function()
 {
-    this.replacement.parentNode.removeChild(this.replacement);
+    if(this.replacement.parentNode)
+    {
+        this.replacement.parentNode.removeChild(this.replacement);
+    }
 
-    this.element.parentNode.removeChild(this.element);
+    if(this.element.parentNode)
+    {
+        this.element.parentNode.removeChild(this.element);
+    }
 };
 
 // main
