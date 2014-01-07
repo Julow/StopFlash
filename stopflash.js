@@ -7,20 +7,18 @@
  */
 
 // class StopFlashUI extends Builder
-function StopFlashUI(elements)
+function StopFlashUI()
 {
     this.super('div');
 
+    this.mainTab = new Builder('div');
+
     this.content = new StopFlashTabs()
         .className('content')
+        .addTab(mainTab)
         .addTab(new Builder('div')
-            .className('tab')
-            .text('Home tab'))
-        .addTab(new Builder('div')
-            .className('tab')
             .text('Whitelist tab'))
         .addTab(new Builder('div')
-            .className('tab')
             .text('Options tab'));
 
     var self = this;
@@ -86,9 +84,9 @@ StopFlashTabs.prototype.setTab = function(index)
 fus.extend(StopFlashTabs, Builder);
 
 // main
-var main = function(elements)
+var main = function(rep)
 {
-    var ui = new StopFlashUI(elements)
+    var ui = new StopFlashUI((rep != null)? rep.flashElements || [] : []);
         .insert(document.body);
 
     ui.content.setTab(0);
