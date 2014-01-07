@@ -92,6 +92,8 @@ function FlashElement(element)
     this.parent = element.parentNode; // :HTMLElement
     this.nextSibling = element.nextSibling; // :HTMLElement
 
+    this.blocked = false; // :boolean
+
     var self = this;
 
     var replacement = new Builder('div')
@@ -125,6 +127,8 @@ FlashElement.prototype.block = function()
     {
         this.parent.appendChild(this.replacement);
     }
+
+    this.blocked = true;
 };
 // function unblock():void
 FlashElement.prototype.unblock = function()
@@ -139,6 +143,8 @@ FlashElement.prototype.unblock = function()
     {
         this.parent.appendChild(this.element);
     }
+
+    this.blocked = false;
 };
 // function remove():void
 FlashElement.prototype.remove = function()
