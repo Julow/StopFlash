@@ -21,7 +21,8 @@ function StopFlashUI(elements)
             .text('Whitelist tab'))
         .addTab(new Builder('div')
             .className('tab')
-            .text('Options tab'));
+            .text('Options tab'))
+        .setTab(0);
 
     var self = this;
 
@@ -64,7 +65,7 @@ function StopFlashTabs()
 
     this.tabs = []; // :Array<Builder>
 }
-// function addTab(Builder builder)@Chainable
+// function addTab(Builder builder):@Chainable
 StopFlashTabs.prototype.addTab = function(builder)
 {
     this.tabs.push(new Builder('div')
@@ -73,18 +74,15 @@ StopFlashTabs.prototype.addTab = function(builder)
         .append(builder.className('tab-content'))
         .insert(this));
 
-    if(this.tabs.length === 1)
-    {
-        this.setTab(0);
-    }
-
     return this;
 };
-// function setTab(int index):void
+// function setTab(int index):@Chainable
 StopFlashTabs.prototype.setTab = function(index)
 {
     this.css('left', '-'+ (index * 300) +'px')
         .css('height', Builder.getStyle(this.tabs[index], 'height'));
+
+    return this;
 };
 fus.extend(StopFlashTabs, Builder);
 
