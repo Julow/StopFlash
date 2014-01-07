@@ -65,9 +65,10 @@ function StopFlashTabs()
 // function addTab(Builder builder)@Chainable
 StopFlashTabs.prototype.addTab = function(builder)
 {
-    this.tabs.push(builder
+    this.tabs.push(new Builder('div')
         .className('tab')
         .css('left', (this.tabs.length * 300) +'px')
+        .append(builder.className('tab-content'))
         .insert(this));
 
     if(this.tabs.length === 1)
