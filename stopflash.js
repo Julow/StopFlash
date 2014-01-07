@@ -29,7 +29,7 @@ function StopFlashUI(elements)
             .className('head')
             .append(new Builder('p')
                 .className('logo')
-                .html('<b>ST<img src="icons/stopflash_16.png" />P</b> <span>Flash</span>'))
+                .html('<b>ST<img src="icons/stopflash_16.png" />P</b> <span>Flash</span>')))
         .append(new Builder('div')
             .className('menu')
             .append(new Builder('a')
@@ -53,7 +53,7 @@ function StopFlashUI(elements)
         .append(this.content)
         .append(new Builder('div')
             .className('foot')
-            .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>')));
+            .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>'));
 }
 fus.extend(StopFlashUI, Builder);
 
