@@ -21,8 +21,7 @@ function StopFlashUI(elements)
             .text('Whitelist tab'))
         .addTab(new Builder('div')
             .className('tab')
-            .text('Options tab'))
-        .setTab(0);
+            .text('Options tab'));
 
     var self = this;
 
@@ -89,8 +88,10 @@ fus.extend(StopFlashTabs, Builder);
 // main
 var main = function(elements)
 {
-    new StopFlashUI(elements)
+    var ui = new StopFlashUI(elements)
         .insert(document.body);
+
+    ui.content.setTab(0);
 };
 
 chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
