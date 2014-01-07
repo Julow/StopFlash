@@ -120,18 +120,28 @@ function FlashElement(element)
 // function block():void
 FlashElement.prototype.block = function()
 {
-    this.element.parentNode.insertBefore(this.replacement, this.nextSibling);
+    var parent = this.element.parentNode || this.replacement.parentNode;
 
-    this.element.parentNode.removeChild(this.element);
+    if(parent != null)
+    {
+        parent.insertBefore(this.replacement, this.nextSibling);
+
+        parent.removeChild(this.element);
+    }
 
     this.blocked = true;
 };
 // function unblock():void
 FlashElement.prototype.unblock = function()
 {
-    this.replacement.parentNode.insertBefore(this.element, this.nextSibling);
+    var parent = this.replacement.parentNode || this.element.parentNode;
 
-    this.replacement.parentNode.removeChild(this.replacement);
+    if(parent != null)
+    {
+        parent.insertBefore(this.element, this.nextSibling);
+
+        parent.removeChild(this.replacement);
+    }
 
     this.blocked = false;
 };
