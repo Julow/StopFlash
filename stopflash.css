@@ -14,9 +14,24 @@ a:hover{
     text-decoration:none;
 }
 .head{
+    background:#333;
+    border-bottom:1px solid #161616;
+    transition:color .2s;
 }
 .menu{
+    background:#3a3a3a;
+    box-shadow:0 0 7px #111;
+    border-bottom:1px solid #222;
+    text-align:center;
 }
+    .menu a{
+        display:inline-block;
+        margin:0 5px;
+        padding:2px 5px;
+    }
+    .menu a:hover{
+        color:#e9e9e9;
+    }
 .content{
     position:relative;
     width:900px;
