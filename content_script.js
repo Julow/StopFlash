@@ -89,7 +89,6 @@ var styles = [
 function FlashElement(element)
 {
     this.element = element; // :HTMLElement
-    this.parent = element.parentNode; // :HTMLElement
     this.nextSibling = element.nextSibling; // :HTMLElement
 
     this.blocked = false; // :boolean
@@ -117,41 +116,41 @@ function FlashElement(element)
 // function block():void
 FlashElement.prototype.block = function()
 {
-    this.parent.removeChild(this.element);
-
     if(this.nextSibling != null)
     {
-        this.parent.insertBefore(this.replacement, this.nextSibling);
+        this.element.parentNode.insertBefore(this.replacement, this.nextSibling);
     }
     else
     {
-        this.parent.appendChild(this.replacement);
+        this.element.parentNode.appendChild(this.replacement);
     }
+
+    this.element.parentNode.removeChild(this.element);
 
     this.blocked = true;
 };
 // function unblock():void
 FlashElement.prototype.unblock = function()
 {
-    this.parent.removeChild(this.replacement);
-
     if(this.nextSibling != null)
     {
-        this.parent.insertBefore(this.element, this.nextSibling);
+        this.replacement.parentNode.insertBefore(this.element, this.nextSibling);
     }
     else
     {
-        this.parent.appendChild(this.element);
+        this.replacement.parentNode.appendChild(this.element);
     }
+
+    this.replacement.parentNode.removeChild(this.replacement);
 
     this.blocked = false;
 };
 // function remove():void
 FlashElement.prototype.remove = function()
 {
-    this.parent.removeChild(this.replacement);
+    this.replacement.parentNode.removeChild(this.replacement);
 
-    this.parent.removeChild(this.element);
+    this.element.parentNode.removeChild(this.element);
 };
 
 // main
