@@ -39,7 +39,13 @@ a:hover{
     transition-duration:.4s;
 }
     .tab{
-        position:absolute;
+        position:relative;
         display:inline-block;
         width:300px;
     }
+        .tab-content{
+            margin:15px;
+            background:#8a8a8a;
+            border:1px solid #aaa;
+            border-radius:2px;
+        }
