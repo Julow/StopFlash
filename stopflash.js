@@ -55,54 +55,23 @@ function StopFlashUI()
 }
 StopFlashUI.prototype.showElements = function(elements)
 {
-    var html = '';
-
-    var bloqued = [];
-
     if(elements != null && elements.length > 0)
     {
-        html = '<table>';
+        var html = '<table>';
 
         for(var i = 0, e; i < elements.length; ++i)
         {
             e = elements[i];
 
-            if(e.blocked)
-            {
-                blocked.push(e);
-            }
-            else
-            {
-                html += '<tr><td>'+ e.element.nodeName +'</td></tr>';
-            }
+            html += '<tr><td>'+ e.element.nodeName +'</td><td>'+ (e.blocked? 'Bloqué' : 'Autorisé') +'</td></tr>';
         }
 
-        html += '</table>';
+        this.mainTab.html(html +'</table>');
     }
     else
     {
-        html = '<p>Aucun element trouvé sur cette page</p>';
+        this.mainTab.html('<p>Aucun element trouvé sur cette page</p>');
     }
-
-    if(bloqued.length > 0)
-    {
-        html = '<table>';
-
-        for(var i = 0, e; i < elements.length; ++i)
-        {
-            e = elements[i];
-
-            html += '<tr><td>'+ e.element.nodeName +'</td></tr>';
-        }
-
-        html += '</table>';
-    }
-    else
-    {
-        html += '<p>Aucun element bloqué sur cette page</p>';
-    }
-
-    this.mainTab.html(html);
 };
 fus.extend(StopFlashUI, Builder);
 
