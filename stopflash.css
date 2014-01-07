@@ -70,3 +70,10 @@ a:hover{
             border:1px solid #aaa;
             border-radius:2px;
         }
+.foot{
+    padding:2px 5px 3px 0;
+    background:#333;
+    border-top:1px solid #161616;
+    text-align:right;
+    font-size:11px;
+}
