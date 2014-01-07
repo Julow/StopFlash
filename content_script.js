@@ -116,14 +116,7 @@ function FlashElement(element)
 // function block():void
 FlashElement.prototype.block = function()
 {
-    if(this.nextSibling != null)
-    {
-        this.element.parentNode.insertBefore(this.replacement, this.nextSibling);
-    }
-    else
-    {
-        this.element.parentNode.appendChild(this.replacement);
-    }
+    this.element.parentNode.insertBefore(this.replacement, this.nextSibling);
 
     this.element.parentNode.removeChild(this.element);
 
@@ -132,14 +125,7 @@ FlashElement.prototype.block = function()
 // function unblock():void
 FlashElement.prototype.unblock = function()
 {
-    if(this.nextSibling != null)
-    {
-        this.replacement.parentNode.insertBefore(this.element, this.nextSibling);
-    }
-    else
-    {
-        this.replacement.parentNode.appendChild(this.element);
-    }
+    this.replacement.parentNode.insertBefore(this.element, this.nextSibling);
 
     this.replacement.parentNode.removeChild(this.replacement);
 
