@@ -15,7 +15,7 @@ function StopFlashUI()
 
     this.content = new StopFlashTabs()
         .className('content')
-        .addTab(mainTab)
+        .addTab(this.mainTab)
         .addTab(new Builder('div')
             .text('Whitelist tab'))
         .addTab(new Builder('div')
@@ -53,6 +53,57 @@ function StopFlashUI()
             .className('foot')
             .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>'));
 }
+StopFlashUI.prototype.showElements = function(elements)
+{
+    var html = '';
+
+    var bloqued = [];
+
+    if(elements != null && elements.length > 0)
+    {
+        html = '<table>';
+
+        for(var i = 0, e; i < elements.length; ++i)
+        {
+            e = elements[i];
+
+            if(e.blocked)
+            {
+                blocked.push(e);
+            }
+            else
+            {
+                html += '<tr><td>'+ e.element.nodeName +'</td></tr>';
+            }
+        }
+
+        html += '</table>';
+    }
+    else
+    {
+        html = '<p>Aucun element trouvé sur cette page</p>';
+    }
+
+    if(bloqued.length > 0)
+    {
+        html = '<table>';
+
+        for(var i = 0, e; i < elements.length; ++i)
+        {
+            e = elements[i];
+
+            html += '<tr><td>'+ e.element.nodeName +'</td></tr>';
+        }
+
+        html += '</table>';
+    }
+    else
+    {
+        html += '<p>Aucun element bloqué sur cette page</p>';
+    }
+
+    this.mainTab.html(html);
+};
 fus.extend(StopFlashUI, Builder);
 
 // class StopFlashTabs extends Builder
@@ -86,8 +137,10 @@ fus.extend(StopFlashTabs, Builder);
 // main
 var main = function(rep)
 {
-    var ui = new StopFlashUI((rep != null)? rep.flashElements || [] : []);
+    var ui = new StopFlashUI()
         .insert(document.body);
+
+    ui.showElements((rep != null)? rep.flashElements : []);
 
     ui.content.setTab(0);
 };
