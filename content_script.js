@@ -155,13 +155,15 @@ FlashElement.prototype.getUrl = function()
         {
             var child = this.element.firstChild;
 
-            do{
+            while(child != null)
+            {
                 if(child.nodeName === 'PARAM' && (child.name === 'src' || child.name === 'movie'))
                 {
                     return child.value;
                 }
+
+                child = child.nextSibling;
             }
-            while(child = child.nextSibling);
         }
     }
 
