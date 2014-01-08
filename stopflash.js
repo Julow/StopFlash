@@ -118,24 +118,20 @@ StopFlashTabs.prototype.setTab = function(index)
 fus.extend(StopFlashTabs, Builder);
 
 // main
-var main = function()
+chrome.runtime.onConnect.addListener(function(port)
 {
     var ui = new StopFlashUI()
         .insert(document.body);
 
     ui.content.setTab(0);
 
-    var elements = [];
-
-    chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
+    port.onMessage.addListener(function(rep)
     {
-        chrome.tabs.sendMessage(tabs[0].id, {'stopflashData': true}, function(rep)
+        if(rep['stopflashDataSend'] && rep['stopflashData'])
         {
-            Array.prototype.unshift.apply(elements, rep);
-
-            ui.setElements(elements);
-        });
+            ui.setElements(rep['stopflashData']);
+        }
     });
-};
 
-main();
+    port.postMessage({'stopflashGetData': true});
+});
