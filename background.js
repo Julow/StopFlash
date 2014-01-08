@@ -6,11 +6,26 @@
  * background.js
  */
 
+function BackgroundFlashData(id)
+{
+    this.id = id; // :int
+    this.changed = false; // :boolean
+
+    this.data = null; // :Object
+}
+// function setData(Object data):void
+BackgroundFlashData.prototype.setData = function(data)
+{
+    this.data = data;
+
+    this.changed = true;
+};
+
 var flashElements = {}; // :Map<chrome.Tab, Object>
 
 chrome.runtime.onConnect.addListener(function(port)
 {
-    if(port.sender.tab != null)
+    if(port.name === 'stopflashContentScript')
     {
         port.onMessage.addListener(function(rep)
         {
@@ -26,7 +41,7 @@ chrome.runtime.onConnect.addListener(function(port)
             }
         });
     }
-    else
+    else if(port.name === 'stopflashPopup')
     {
         port.onMessage.addListener(function(rep)
         {
