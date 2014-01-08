@@ -20,7 +20,7 @@
     },
 
     "permissions": [
-        "\u003Call_urls\u003E"
+        "activeTab"
     ],
 
     "content_scripts": [
