@@ -126,15 +126,22 @@ FlashElement.prototype.getUrl = function()
     }
     else if(this.element.nodeName === 'OBJECT')
     {
-        var child = this.element.firstChild;
-
-        do{
-            if(child.nodeName === 'PARAM' && (child.name === 'src' || child.name === 'movie'))
-            {
-                return child.value;
-            }
+        if(this.element.data)
+        {
+            return this.element.data;
         }
-        while(child = child.nextSibling);
+        else
+        {
+            var child = this.element.firstChild;
+
+            do{
+                if(child.nodeName === 'PARAM' && (child.name === 'src' || child.name === 'movie'))
+                {
+                    return child.value;
+                }
+            }
+            while(child = child.nextSibling);
+        }
     }
 
     return null;
