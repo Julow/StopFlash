@@ -125,19 +125,16 @@ var main = function()
 
     ui.content.setTab(0);
 
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
-    {
-        if(request.stopflashData)
-        {
-            ui.setElements(request.stopflashData);
-
-            sendResponse();
-        }
-    });
+    var elements = [];
 
     chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
     {
-        chrome.tabs.sendMessage(tabs[0].id, {'getElements': 'stopflash'}, function(rep){});
+        chrome.tabs.sendMessage(tabs[0].id, {'stopflashData': true}, function(rep)
+        {
+            Array.prototype.unshift.apply(elements, rep);
+
+            ui.setElements(elements);
+        });
     });
 };
 

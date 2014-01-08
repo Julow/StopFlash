@@ -6,71 +6,6 @@
  * content_script.js
  */
 
-// class FrameCollection
-function FrameCollection()
-{
-    this.frames = [];
-}
-// function addFrame():void
-FrameCollection.prototype.addFrame = function(doc)
-{
-    this.frames.push(new StopFlashFrame(this, doc));
-
-    this.sendData();
-};
-// function sendData():void
-FrameCollection.prototype.sendData = function()
-{
-    var datas = [];
-
-    for(var i = 0; i < this.frames.length; ++i)
-    {
-        datas.push(this.frames[i].collection.getData());
-    }
-
-    chrome.runtime.sendMessage({'stopflashData': datas}, function(res){});
-};
-
-// class StopFlashFrame
-function StopFlashFrame(frames, doc)
-{
-    this.frames = frames;
-
-    this.collection = new FlashCollection();
-
-    this.collection.add(doc.getElementsByTagName('OBJECT'));
-    this.collection.add(doc.getElementsByTagName('EMBED'));
-
-    var self = this;
-
-    this.observer = new MutationObserver(function(changes)
-    {
-        var changed = false;
-
-        for(var i = 0, c; i < changes.length; ++i)
-        {
-            c = changes[i];
-
-            if(c.addedNodes != null)
-            {
-                changed = (self.collection.add(c.addedNodes) || changed);
-            }
-
-            if(c.removedNodes != null)
-            {
-                changed = (self.collection.remove(c.removedNodes) || changed);
-            }
-        }
-
-        if(changed)
-        {
-            self.frames.sendData();
-        }
-    });
-
-    this.observer.observe(doc, {childList: true, subtree: true});
-}
-
 // function isFlash(HTMLElement element):boolean
 var isFlash = function(element)
 {
@@ -291,27 +226,38 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    if(window == window.top)
-    {
-        window._stopFlashFrames = new FrameCollection();
+    var collection = new FlashCollection();
 
-        chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
+    collection.add(document.getElementsByTagName('OBJECT'));
+    collection.add(document.getElementsByTagName('EMBED'));
+
+    var observer = new MutationObserver(function(changes)
+    {
+        for(var i = 0, c; i < changes.length; ++i)
         {
-            if(request.getElements === 'stopflash')
+            c = changes[i];
+
+            if(c.addedNodes != null)
             {
-                sendResponse();
+                collection.add(c.addedNodes);
             }
-        });
-    }
 
-    var w = window;
+            if(c.removedNodes != null)
+            {
+                collection.remove(c.removedNodes);
+            }
+        }
+    });
 
-    while(w != w.top)
+    observer.observe(document, {childList: true, subtree: true});
+
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
     {
-        w = w.top;
-    }
-
-    w._stopFlashFrames.addFrame(document);
+        if(request.stopflashData)
+        {
+            sendResponse(collection.getData());
+        }
+    });
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
