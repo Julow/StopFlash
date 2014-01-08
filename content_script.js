@@ -226,37 +226,32 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    var collection = new FlashCollection();
-
-    collection.add(document.getElementsByTagName('OBJECT'));
-    collection.add(document.getElementsByTagName('EMBED'));
-
-    var observer = new MutationObserver(function(changes)
+    chrome.runtime.onConnect.addListener(function(port)
     {
-        for(var i = 0, c; i < changes.length; ++i)
+        var collection = new FlashCollection();
+
+        collection.add(document.getElementsByTagName('OBJECT'));
+        collection.add(document.getElementsByTagName('EMBED'));
+
+        var observer = new MutationObserver(function(changes)
         {
-            c = changes[i];
-
-            if(c.addedNodes != null)
+            for(var i = 0, c; i < changes.length; ++i)
             {
-                collection.add(c.addedNodes);
+                c = changes[i];
+
+                if(c.addedNodes != null)
+                {
+                    collection.add(c.addedNodes);
+                }
+
+                if(c.removedNodes != null)
+                {
+                    collection.remove(c.removedNodes);
+                }
             }
+        });
 
-            if(c.removedNodes != null)
-            {
-                collection.remove(c.removedNodes);
-            }
-        }
-    });
-
-    observer.observe(document, {childList: true, subtree: true});
-
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
-    {
-        if(request.stopflashData)
-        {
-            sendResponse(collection.getData());
-        }
+        observer.observe(document, {childList: true, subtree: true});
     });
 };
 
