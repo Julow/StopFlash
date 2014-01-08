@@ -226,40 +226,39 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    chrome.runtime.onConnect.addListener(function(port)
+    var collection = new FlashCollection();
+
+    collection.add(document.getElementsByTagName('OBJECT'));
+    collection.add(document.getElementsByTagName('EMBED'));
+
+    var port = chrome.runtime.connect({'name': 'stopflashContentScriptConnection'});
+
+    var observer = new MutationObserver(function(changes)
     {
-        var collection = new FlashCollection();
+        var changed = false;
 
-        collection.add(document.getElementsByTagName('OBJECT'));
-        collection.add(document.getElementsByTagName('EMBED'));
-
-        var observer = new MutationObserver(function(changes)
+        for(var i = 0, c; i < changes.length; ++i)
         {
-            var changed = false;
+            c = changes[i];
 
-            for(var i = 0, c; i < changes.length; ++i)
+            if(c.addedNodes != null)
             {
-                c = changes[i];
-
-                if(c.addedNodes != null)
-                {
-                    changed = (collection.add(c.addedNodes) || false);
-                }
-
-                if(c.removedNodes != null)
-                {
-                    changed = (collection.remove(c.removedNodes) || false);
-                }
+                changed = (collection.add(c.addedNodes) || false);
             }
 
-            if(changed)
+            if(c.removedNodes != null)
             {
-                port.postMessage({'stopflashDataUpdate': true, 'stopflashData': collection.getData()})
+                changed = (collection.remove(c.removedNodes) || false);
             }
-        });
+        }
 
-        observer.observe(document, {childList: true, subtree: true});
+        if(changed)
+        {
+            port.postMessage({'stopflashDataUpdate': true, 'stopflashData': collection.getData()})
+        }
     });
+
+    observer.observe(document, {childList: true, subtree: true});
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
