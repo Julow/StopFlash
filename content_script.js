@@ -15,6 +15,8 @@ function FrameCollection()
 FrameCollection.prototype.addFrame = function(doc)
 {
     this.frames.push(new StopFlashFrame(this, doc));
+
+    this.sendData();
 };
 // function sendData():void
 FrameCollection.prototype.sendData = function()
@@ -43,19 +45,26 @@ function StopFlashFrame(frames, doc)
 
     this.observer = new MutationObserver(function(changes)
     {
+        var changed = false;
+
         for(var i = 0, c; i < changes.length; ++i)
         {
             c = changes[i];
 
             if(c.addedNodes != null)
             {
-                self.collection.add(c.addedNodes);
+                changed = (self.collection.add(c.addedNodes) || changed);
             }
 
             if(c.removedNodes != null)
             {
-                self.collection.remove(c.removedNodes);
+                changed = (self.collection.remove(c.removedNodes) || changed);
             }
+        }
+
+        if(changed)
+        {
+            self.frames.sendData();
         }
     });
 
@@ -85,9 +94,11 @@ FlashCollection.prototype.getData = function()
 
     return datas;
 };
-// function add(NodeList elements)
+// function add(NodeList elements):boolean
 FlashCollection.prototype.add = function(elements)
 {
+    var changed = false;
+
     for(var i = 0, e; i < elements.length; ++i)
     {
         e = elements[i];
@@ -113,6 +124,8 @@ FlashCollection.prototype.add = function(elements)
                 this.flashElements.push(f);
 
                 f.block();
+
+                changed = true;
             }
             else if(f.blocked)
             {
@@ -120,10 +133,14 @@ FlashCollection.prototype.add = function(elements)
             }
         }
     }
+
+    return changed;
 };
-// function remove(NodeList elements)
+// function remove(NodeList elements):boolean
 FlashCollection.prototype.remove = function(elements)
 {
+    var changed = false;
+
     for(var i = 0, f; i < elements.length; ++i)
     {
         f = this.get(elements[i]);
@@ -131,8 +148,12 @@ FlashCollection.prototype.remove = function(elements)
         if(f != null)
         {
             f.remove();
+
+            changed = true;
         }
     }
+
+    return changed;
 };
 // function get(HTMLElement element)
 FlashCollection.prototype.get = function(element)
@@ -279,8 +300,6 @@ var main = function()
             if(request.getElements === 'stopflash')
             {
                 sendResponse();
-
-                window._stopFlashFrames.sendData();
             }
         });
     }
