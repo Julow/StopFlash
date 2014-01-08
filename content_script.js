@@ -235,19 +235,26 @@ var main = function()
 
         var observer = new MutationObserver(function(changes)
         {
+            var changed = false;
+
             for(var i = 0, c; i < changes.length; ++i)
             {
                 c = changes[i];
 
                 if(c.addedNodes != null)
                 {
-                    collection.add(c.addedNodes);
+                    changed = (collection.add(c.addedNodes) || false);
                 }
 
                 if(c.removedNodes != null)
                 {
-                    collection.remove(c.removedNodes);
+                    changed = (collection.remove(c.removedNodes) || false);
                 }
+            }
+
+            if(changed)
+            {
+                port.postMessage({'stopflashDataUpdate': true, 'stopflashData': collection.getData()})
             }
         });
 
