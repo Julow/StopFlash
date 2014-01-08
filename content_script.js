@@ -134,7 +134,7 @@ FlashElement.prototype.getData = function()
 {
     return {
         'type': this.element.nodeName,
-        'url': this.getUrl,
+        'url': this.getUrl(),
         'blocked': this.blocked
     };
 };
