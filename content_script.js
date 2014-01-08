@@ -231,7 +231,7 @@ var main = function()
     collection.add(document.getElementsByTagName('OBJECT'));
     collection.add(document.getElementsByTagName('EMBED'));
 
-    var port = chrome.runtime.connect({'name': 'stopflashContentScriptConnection'});
+    var port = chrome.runtime.connect({'name': 'stopflashContentScript'});
 
     var observer = new MutationObserver(function(changes)
     {
