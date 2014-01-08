@@ -53,7 +53,8 @@ function StopFlashUI()
             .className('foot')
             .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>'));
 }
-StopFlashUI.prototype.showElements = function(elements)
+// function setElements(Array<Object> elements):void
+StopFlashUI.prototype.setElements = function(elements)
 {
     if(elements != null && elements.length > 0)
     {
@@ -63,7 +64,7 @@ StopFlashUI.prototype.showElements = function(elements)
         {
             e = elements[i];
 
-            html += '<tr><td>'+ e.element.nodeName +'</td><td>'+ (e.blocked? 'Bloqué' : 'Autorisé') +'</td></tr>';
+            html += '<tr><td>'+ e.url +'</td><td>'+ e.type +'</td><td>'+ (e.blocked? 'Bloqué' : 'Autorisé') +'</td></tr>';
         }
 
         this.mainTab.html(html +'</table>');
@@ -104,17 +105,27 @@ StopFlashTabs.prototype.setTab = function(index)
 fus.extend(StopFlashTabs, Builder);
 
 // main
-var main = function(rep)
+var main = function()
 {
     var ui = new StopFlashUI()
         .insert(document.body);
 
-    ui.showElements((rep != null)? rep.flashElements : []);
-
     ui.content.setTab(0);
+
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
+    {
+        if(request.stopflashData)
+        {
+            ui.setElements(request.stopflashData);
+
+            sendResponse();
+        }
+    });
+
+    chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
+    {
+        chrome.tabs.sendMessage(tabs[0].id, {'getElements': 'stopflash'}, function(rep){});
+    });
 };
 
-chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
-{
-    chrome.tabs.sendMessage(tabs[0].id, {'getElements': 'stopflash'}, main);
-});
+main();
