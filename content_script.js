@@ -6,6 +6,39 @@
  * content_script.js
  */
 
+// class StopFlashFrame
+function StopFlashFrame(frames)
+{
+    this.frames = frames;
+
+    this.collection = new FlashCollection();
+
+    this.collection.add(document.getElementsByTagName('OBJECT'));
+    this.collection.add(document.getElementsByTagName('EMBED'));
+
+    var self = this;
+
+    this.observer = new MutationObserver(function(changes)
+    {
+        for(var i = 0, c; i < changes.length; ++i)
+        {
+            c = changes[i];
+
+            if(c.addedNodes != null)
+            {
+                self.collection.add(c.addedNodes);
+            }
+
+            if(c.removedNodes != null)
+            {
+                self.collection.remove(c.removedNodes);
+            }
+        }
+    });
+
+    this.observer.observe(document, {childList: true, subtree: true});
+}
+
 // function isFlash(HTMLElement element):boolean
 var isFlash = function(element)
 {
@@ -214,40 +247,29 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    var elements = new FlashCollection();
-
-    elements.add(document.getElementsByTagName('OBJECT'));
-    elements.add(document.getElementsByTagName('EMBED'));
-
-    var observer = new MutationObserver(function(changes)
+    if(window == window.top)
     {
-        for(var i = 0, c; i < changes.length; ++i)
+        window._stopFlashFrames = [];
+
+        chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
         {
-            c = changes[i];
-
-            if(c.addedNodes != null)
+            if(request.getElements === 'stopflash')
             {
-                elements.add(c.addedNodes);
+                sendResponse();
+
+                elements.sendData();
             }
+        });
+    }
 
-            if(c.removedNodes != null)
-            {
-                elements.remove(c.removedNodes);
-            }
-        }
-    });
+    var w = window;
 
-    observer.observe(document, {childList: true, subtree: true});
-
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
+    while(w != w.top)
     {
-        if(request.getElements === 'stopflash')
-        {
-            sendResponse();
+        w = w.top;
+    }
 
-            elements.sendData();
-        }
-    });
+    w._stopFlashFrames.push(elements);
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
