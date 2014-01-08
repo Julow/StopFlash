@@ -117,6 +117,28 @@ function FlashElement(element)
 
     this.replacement = replacement.node;
 }
+// function getUrl():String
+FlashElement.prototype.getUrl = function()
+{
+    if(this.element.nodeName === 'EMBED')
+    {
+        return this.element.src;
+    }
+    else if(this.element.nodeName === 'OBJECT')
+    {
+        var child = this.element.firstChild;
+
+        do{
+            if(child.nodeName === 'PARAM' && (child.name === 'src' || child.name === 'movie'))
+            {
+                return child.value;
+            }
+        }
+        while(child = child.nextSibling);
+    }
+
+    return null;
+};
 // function block():void
 FlashElement.prototype.block = function()
 {
