@@ -117,6 +117,15 @@ function FlashElement(element)
 
     this.replacement = replacement.node;
 }
+// function getData():Object
+FlashElement.prototype.getData = function()
+{
+    return {
+        'type': this.element.nodeName,
+        'url': this.getUrl,
+        'blocked': this.blocked
+    };
+};
 // function getUrl():String
 FlashElement.prototype.getUrl = function()
 {
