@@ -97,8 +97,21 @@ StopFlashTabs.prototype.addTab = function(builder)
 // function setTab(int index):@Chainable
 StopFlashTabs.prototype.setTab = function(index)
 {
-    this.css('left', '-'+ (index * 300) +'px')
-        .css('height', Builder.getStyle(this.tabs[index], 'height'));
+    for(var i = 0; i < this.tabs.length; ++i)
+    {
+        if(index === i)
+        {
+            this.tabs[i].css('position', 'relative')
+                    .css('opacity', '1');
+        }
+        else
+        {
+            this.tabs[i].css('position', '')
+                    .css('opacity', '0.3');
+        }
+    }
+
+    this.css('left', '-'+ (index * 300) +'px');
 
     return this;
 };
