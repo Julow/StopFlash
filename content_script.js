@@ -23,7 +23,7 @@ FrameCollection.prototype.sendData = function()
 
     for(var i = 0; i < this.frames.length; ++i)
     {
-        this.datas.push(this.frames[i].getData());
+        datas.push(this.frames[i].collection.getData());
     }
 
     chrome.runtime.sendMessage({'stopflashData': datas}, function(res){});
@@ -272,7 +272,7 @@ var main = function()
 {
     if(window == window.top)
     {
-        window._stopFlashFrames = [];
+        window._stopFlashFrames = new FrameCollection();
 
         chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
         {
@@ -280,7 +280,7 @@ var main = function()
             {
                 sendResponse();
 
-                elements.sendData();
+                window._stopFlashFrames.sendData();
             }
         });
     }
@@ -292,7 +292,7 @@ var main = function()
         w = w.top;
     }
 
-    w._stopFlashFrames.push(elements);
+    w._stopFlashFrames.addFrame();
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
