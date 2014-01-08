@@ -17,6 +17,18 @@ function FlashCollection()
 {
     this.flashElements = []; // :Array<FlashElement>
 }
+// function getDatas():Array<Object>
+FlashCollection.prototype.getDatas = function()
+{
+    var datas = [];
+
+    for(var i = 0; i < this.flashElements.length; ++i)
+    {
+        datas.push(this.flashElements[i].getData());
+    }
+
+    return datas;
+};
 // function add(NodeList elements)
 FlashCollection.prototype.add = function(elements)
 {
