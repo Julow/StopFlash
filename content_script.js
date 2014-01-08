@@ -17,8 +17,8 @@ function FlashCollection()
 {
     this.flashElements = []; // :Array<FlashElement>
 }
-// function getDatas():Array<Object>
-FlashCollection.prototype.getDatas = function()
+// function sendData():void
+FlashCollection.prototype.sendData = function()
 {
     var datas = [];
 
@@ -27,7 +27,7 @@ FlashCollection.prototype.getDatas = function()
         datas.push(this.flashElements[i].getData());
     }
 
-    return datas;
+    chrome.runtime.sendMessage({'stopflashData': datas}, function(res){});
 };
 // function add(NodeList elements)
 FlashCollection.prototype.add = function(elements)
@@ -241,7 +241,9 @@ var main = function()
     {
         if(request.getElements === 'stopflash')
         {
-            sendResponse(elements);
+            sendResponse();
+
+            elements.sendData();
         }
     });
 };
