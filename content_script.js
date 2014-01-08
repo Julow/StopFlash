@@ -6,6 +6,29 @@
  * content_script.js
  */
 
+// class FrameCollection
+function FrameCollection()
+{
+    this.frames = [];
+}
+// function addFrame():void
+FrameCollection.prototype.addFrame = function()
+{
+    this.frames.push(new StopFlashFrame(this));
+};
+// function sendData():void
+FrameCollection.prototype.sendData = function()
+{
+    var datas = [];
+
+    for(var i = 0; i < this.frames.length; ++i)
+    {
+        this.datas.push(this.frames[i].getData());
+    }
+
+    chrome.runtime.sendMessage({'stopflashData': datas}, function(res){});
+};
+
 // class StopFlashFrame
 function StopFlashFrame(frames)
 {
@@ -50,8 +73,8 @@ function FlashCollection()
 {
     this.flashElements = []; // :Array<FlashElement>
 }
-// function sendData():void
-FlashCollection.prototype.sendData = function()
+// function getData():Array<Object>
+FlashCollection.prototype.getData = function()
 {
     var datas = [];
 
@@ -60,7 +83,7 @@ FlashCollection.prototype.sendData = function()
         datas.push(this.flashElements[i].getData());
     }
 
-    chrome.runtime.sendMessage({'stopflashData': datas}, function(res){});
+    return datas;
 };
 // function add(NodeList elements)
 FlashCollection.prototype.add = function(elements)
