@@ -12,9 +12,9 @@ function FrameCollection()
     this.frames = [];
 }
 // function addFrame():void
-FrameCollection.prototype.addFrame = function()
+FrameCollection.prototype.addFrame = function(doc)
 {
-    this.frames.push(new StopFlashFrame(this));
+    this.frames.push(new StopFlashFrame(this, doc));
 };
 // function sendData():void
 FrameCollection.prototype.sendData = function()
@@ -30,14 +30,14 @@ FrameCollection.prototype.sendData = function()
 };
 
 // class StopFlashFrame
-function StopFlashFrame(frames)
+function StopFlashFrame(frames, doc)
 {
     this.frames = frames;
 
     this.collection = new FlashCollection();
 
-    this.collection.add(document.getElementsByTagName('OBJECT'));
-    this.collection.add(document.getElementsByTagName('EMBED'));
+    this.collection.add(doc.getElementsByTagName('OBJECT'));
+    this.collection.add(doc.getElementsByTagName('EMBED'));
 
     var self = this;
 
@@ -59,7 +59,7 @@ function StopFlashFrame(frames)
         }
     });
 
-    this.observer.observe(document, {childList: true, subtree: true});
+    this.observer.observe(doc, {childList: true, subtree: true});
 }
 
 // function isFlash(HTMLElement element):boolean
@@ -292,7 +292,7 @@ var main = function()
         w = w.top;
     }
 
-    w._stopFlashFrames.addFrame();
+    w._stopFlashFrames.addFrame(document);
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
