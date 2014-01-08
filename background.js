@@ -10,17 +10,34 @@ var flashElements = {}; // :Map<chrome.Tab, Object>
 
 chrome.runtime.onConnect.addListener(function(port)
 {
-    port.onMessage.addListener(function(rep)
+    if(port.sender.tab != null)
     {
-        if(rep['stopflashDataUpdate'] && rep['stopflashData'])
+        port.onMessage.addListener(function(rep)
         {
-            flashElements[port.sender.tab] = rep.stopflashData;
+            if(rep['stopflashInit'])
+            {
+            }
 
-            port.postMessage({succes: true});
-        }
-        else if(rep['stopflashGetData'])
+            if(rep['stopflashDataUpdate'] && rep['stopflashData'])
+            {
+                flashElements[port.sender.tab] = rep.stopflashData;
+
+                port.postMessage({succes: true});
+            }
+        });
+    }
+    else
+    {
+        port.onMessage.addListener(function(rep)
         {
-            port.postMessage({'stopflashDataSend': true, 'stopflashData': flashElements[port.sender.tab]});
-        }
-    });
+            if(rep['stopflashInit'])
+            {
+                port.postMessage({'stopflashDataSend': true, 'stopflashData': flashElements[port.sender.tab]});
+            }
+
+            if(rep['stopflashStillHere'])
+            {
+            }
+        });
+    }
 });
