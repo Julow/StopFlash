@@ -58,6 +58,14 @@ BackgroundFlashData.prototype.sendToPopup = function()
         this.popupPort.postMessage({'stopflashData': this.data});
     }
 };
+// function sendToContent(Object data):void
+BackgroundFlashData.prototype.sendToContent = function(data)
+{
+    if(this.contentPort != null)
+    {
+        this.contentPort.postMessage(data);
+    }
+};
 // function clear():void
 BackgroundFlashData.prototype.clear = function()
 {
@@ -145,12 +153,12 @@ chrome.runtime.onConnect.addListener(function(port)
 
             if(rep['stopflashBlock'])
             {
-                //
+                data.sendToContent({'stopflashBlock': rep['stopflashBlock']});
             }
 
             if(rep['stopflashUnblock'])
             {
-                //
+                data.sendToContent({'stopflashUnblock': rep['stopflashUnblock']});
             }
         });
     }
