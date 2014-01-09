@@ -53,6 +53,11 @@ function FlashCollection(doc)
 
     this.port.postMessage({'stopflashInit': true});
 }
+// function sendData():void
+FlashCollection.prototype.sendData = function()
+{
+    this.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': this.getData()});
+};
 // function getData():Array<Object>
 FlashCollection.prototype.getData = function()
 {
