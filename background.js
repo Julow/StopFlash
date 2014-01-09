@@ -68,6 +68,7 @@ BackgroundFlashData.prototype.clear = function()
 };
 
 var flashData = []; // :Array<BackgroundFlashData>
+var whitelist = []; // :Array<String>
 
 // function getFlashData(int id):BackgroundFlashData
 var getFlashData = function(id)
