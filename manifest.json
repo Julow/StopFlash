@@ -23,6 +23,10 @@
         "activeTab"
     ],
 
+    "background": {
+        "page": "background.html"
+    },
+
     "content_scripts": [
         {
             "matches": ["\u003Call_urls\u003E"],
