@@ -52,6 +52,8 @@ function FlashCollection(doc)
     observer.observe(doc, {childList: true, subtree: true});
 
     this.port.postMessage({'stopflashInit': true});
+
+    this.sendData();
 }
 // function sendData():void
 FlashCollection.prototype.sendData = function()
