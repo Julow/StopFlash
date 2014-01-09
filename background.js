@@ -6,6 +6,8 @@
  * background.js
  */
 
+var frameId = 0;
+
 function StopFlashBackground()
 {
     this.tabs = []; // :Array<StopFlashTab>
@@ -13,7 +15,21 @@ function StopFlashBackground()
 
 function StopFlashTab()
 {
-    this.frames = [];
+    this.frames = []; // :Array<StopFlashFrame>
+}
+// function newTab():StopFlashFrame
+StopFlashTab.prototype.newTab = function()
+{
+    var frame = new StopFlashFrame(++frameId);
+
+    this.frames.push(frame);
+
+    return frame;
+};
+
+function StopFlashFrame(id)
+{
+    this.id = id; // :int
 }
 
 /*
