@@ -260,10 +260,7 @@ var main = function()
 
     observer.observe(document, {childList: true, subtree: true});
 
-    chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
-    {
-        port.postMessage({'stopflashInit': tabs[0].id});
-    });
+    port.postMessage({'stopflashInit': true});
 };
 
 document.addEventListener('DOMContentLoaded', main, false);

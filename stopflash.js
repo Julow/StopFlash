@@ -139,4 +139,4 @@ chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
     var port = chrome.runtime.connect({'name': 'stopflashPopup'});
 
     port.postMessage({'stopflashInit': tabs[0].id});
-};
+});
