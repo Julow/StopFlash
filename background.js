@@ -6,6 +6,7 @@
  * background.js
  */
 
+/*
 function BackgroundFlashData(id)
 {
     this.id = id; // :int
@@ -178,3 +179,4 @@ chrome.runtime.onConnect.addListener(function(port)
         });
     }
 });
+*/
