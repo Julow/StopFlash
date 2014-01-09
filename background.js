@@ -43,8 +43,30 @@ BackgroundFlashData.prototype.sendToPopup = function()
         this.popupPort.postMessage({'stopflashData': this.data});
     }
 };
+// function clear():void
+BackgroundFlashData.prototype.clear = function()
+{
+    this.data = null;
+
+    this.popupPort.disconnect();
+    this.popupPort = null;
+};
 
 var flashData = []; // :Array<BackgroundFlashData>
+
+// function getFlashData(int id):BackgroundFlashData
+var getFlashData = function(id)
+{
+    for(var i = 0; i < flashData.length; ++i)
+    {
+        if(flashData[i].id === id)
+        {
+            return flashData[i];
+        }
+    }
+
+    return null;
+};
 
 chrome.runtime.onConnect.addListener(function(port)
 {
@@ -56,7 +78,18 @@ chrome.runtime.onConnect.addListener(function(port)
         {
             if(rep['stopflashInit'])
             {
-                data = new BackgroundFlashData(rep['stopflashInit']);
+                data = getFlashData(port.sender.tab.id);
+
+                if(data != null)
+                {
+                    data.clear();
+                }
+                else
+                {
+                    data = new BackgroundFlashData(port.sender.tab.id);
+
+                    flashData.push(data);
+                }
             }
 
             if(rep['stopflashDataUpdate'] && rep['stopflashData'])
@@ -71,16 +104,11 @@ chrome.runtime.onConnect.addListener(function(port)
         {
             if(rep['stopflashInit'])
             {
-                for(var i = 0, d; i < flashData.length; ++i)
+                var data = getFlashData(rep['stopflashInit']);
+
+                if(data != null)
                 {
-                    d = flashData[i];
-
-                    if(d.id === rep['stopflashInit'])
-                    {
-                        d.setPopup(port);
-
-                        break;
-                    }
+                    d.setPopup(port);
                 }
             }
         });
