@@ -108,7 +108,7 @@ chrome.runtime.onConnect.addListener(function(port)
 
                 if(data != null)
                 {
-                    d.setPopup(port);
+                    data.setPopup(port);
                 }
             }
         });
