@@ -61,7 +61,7 @@ function FlashCollection(doc)
         }
     });
 
-    this.port.postMessage({'stopflashInit': true});
+    this.port.postMessage({'stopflashInit': true, 'stopflashIsMainFrame': (window == window.top)});
 
     var observer = new MutationObserver(function(changes)
     {
@@ -133,7 +133,7 @@ FlashCollection.prototype.add = function(elements)
 
                 this.flashElements.push(f);
 
-                if(!f.isWhitelist)
+                if(!f.isWhitelist())
                 {
                     f.block();
                 }
@@ -232,13 +232,17 @@ FlashElement.prototype.getData = function()
 // function isWhitelist():boolean
 FlashElement.prototype.isWhitelist = function()
 {
+    var url = this.getUrl();
+
     for(var i = 0; i < whitelist.length; ++i)
     {
-        if(whitelist[i].indexOf(this.getUrl()) >= 0)
+        if(whitelist[i].indexOf(url) >= 0)
         {
             return true;
         }
     }
+
+    return false;
 };
 // function getUrl():String
 FlashElement.prototype.getUrl = function()
