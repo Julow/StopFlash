@@ -58,19 +58,14 @@ function FlashCollection(doc)
 // function sendData():void
 FlashCollection.prototype.sendData = function()
 {
-    this.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': this.getData()});
-};
-// function getData():Array<Object>
-FlashCollection.prototype.getData = function()
-{
-    var datas = [];
+    var data = [];
 
     for(var i = 0; i < this.flashElements.length; ++i)
     {
-        datas.push(this.flashElements[i].getData());
+        data.push(this.flashElements[i].getData());
     }
 
-    return datas;
+    this.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': data});
 };
 // function add(NodeList elements):boolean
 FlashCollection.prototype.add = function(elements)
