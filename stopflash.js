@@ -64,7 +64,7 @@ StopFlashUI.prototype.setElements = function(elements)
         {
             e = elements[i];
 
-            html += '<tr><td>'+ e.url +'</td><td>'+ e.type +'</td><td>'+ (e.blocked? 'Bloqué' : 'Autorisé') +'</td></tr>';
+            html += '<tr><td>'+ e.url +'</td><td>'+ e.type +'</td><td>'+ (e.whitelist? '[Whitelist] ' : '') + (e.blocked? 'Bloqué' : 'Autorisé') +'</td></tr>';
         }
 
         this.mainTab.html(html +'</table>');
