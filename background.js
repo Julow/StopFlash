@@ -137,6 +137,13 @@ chrome.runtime.onConnect.addListener(function(port)
                 data.setContentScript(port);
             }
 
+            if(rep['stopflashHaveChange'])
+            {
+                data.data = null;
+
+                data.sendToContent({'stopflashDataUpdate'});
+            }
+
             if(rep['stopflashDataUpdate'] && rep['stopflashData'])
             {
                 data.setData(rep.stopflashData);

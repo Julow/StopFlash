@@ -34,6 +34,11 @@ function FlashCollection(doc)
             self.add(doc.getElementsByTagName('EMBED'));
         }
 
+        if(req['stopflashDataUpdate'])
+        {
+            self.sendData();
+        }
+
         if(req['stopflashBlock'])
         {
             for(var i = 0, e; i < req['stopflashBlock'].length; ++i)
@@ -61,7 +66,7 @@ function FlashCollection(doc)
         }
     });
 
-    this.port.postMessage({'stopflashInit': true, 'stopflashIsMainFrame': (window == window.top)});
+    this.port.postMessage({'stopflashHaveChange': true, 'stopflashIsMainFrame': (window == window.top)});
 
     var observer = new MutationObserver(function(changes)
     {
@@ -84,7 +89,7 @@ function FlashCollection(doc)
 
         if(changed)
         {
-            self.sendData();
+            self.port.postMessage({'stopflashHaveChange': true});
         }
     });
 
