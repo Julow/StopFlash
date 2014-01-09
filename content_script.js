@@ -133,7 +133,10 @@ FlashCollection.prototype.add = function(elements)
 
                 this.flashElements.push(f);
 
-                f.block();
+                if(!f.isWhitelist)
+                {
+                    f.block();
+                }
 
                 changed = true;
             }
@@ -222,8 +225,20 @@ FlashElement.prototype.getData = function()
     return {
         'type': this.element.nodeName,
         'url': this.getUrl(),
-        'blocked': this.blocked
+        'blocked': this.blocked,
+        'whitelist': this.isWhitelist()
     };
+};
+// function isWhitelist():boolean
+FlashElement.prototype.isWhitelist = function()
+{
+    for(var i = 0; i < whitelist.length; ++i)
+    {
+        if(whitelist[i].indexOf(this.getUrl()) >= 0)
+        {
+            return true;
+        }
+    }
 };
 // function getUrl():String
 FlashElement.prototype.getUrl = function()
