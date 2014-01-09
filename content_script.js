@@ -24,6 +24,37 @@ function FlashCollection(doc)
 
     var self = this;
 
+    this.port.onMessage.addListener(function(req)
+    {
+        if(req['stopflashBlock'])
+        {
+            for(var i = 0, e; i < req['stopflashBlock'].length; ++i)
+            {
+                e = self.get(req['stopflashBlock'][i]);
+
+                if(e != null)
+                {
+                    e.block();
+                }
+            }
+        }
+
+        if(req['stopflashUnblock'])
+        {
+            for(var i = 0, e; i < req['stopflashUnblock'].length; ++i)
+            {
+                e = self.get(req['stopflashUnblock'][i]);
+
+                if(e != null)
+                {
+                    e.unblock();
+                }
+            }
+        }
+    });
+
+    this.port.postMessage({'stopflashInit': true});
+
     var observer = new MutationObserver(function(changes)
     {
         var changed = false;
@@ -50,8 +81,6 @@ function FlashCollection(doc)
     });
 
     observer.observe(doc, {childList: true, subtree: true});
-
-    this.port.postMessage({'stopflashInit': true});
 
     this.sendData();
 }
