@@ -13,7 +13,7 @@ function BackgroundFlashData(id)
     this.data = null; // :Object
 
     this.popupPort = null; // :chrome.runtime.Port
-    this.contentPort = null; // :chrome.runtime.Port
+    this.contentPorts = []; // :Array<chrome.runtime.Port>
 }
 // function setData(Object data):void
 BackgroundFlashData.prototype.setData = function(data)
@@ -39,16 +39,21 @@ BackgroundFlashData.prototype.setPopup = function(popupPort)
 // function setContentScript(chrome.runtime.Port contentPort):void
 BackgroundFlashData.prototype.setContentScript = function(contentPort)
 {
-    this.contentPort = contentPort;
+    this.contentPorts.push(contentPort);
 
     var self = this;
 
-    this.contentPort.onDisconnect.addListener(function()
+    contentPort.onDisconnect.addListener(function()
     {
-        self.contentPort = null;
+        var index = self.contentPorts.indexOf(contentPort);
+
+        if(index >= 0)
+        {
+            self.contentPorts.splice(index, 1);
+        }
     });
 
-    this.sendToContent({'stopflashWhitelist': whitelist});
+    contentPort.postMessage({'stopflashWhitelist': whitelist});
 };
 // function sendToPopup():void
 BackgroundFlashData.prototype.sendToPopup = function()
@@ -61,9 +66,9 @@ BackgroundFlashData.prototype.sendToPopup = function()
 // function sendToContent(Object data):void
 BackgroundFlashData.prototype.sendToContent = function(data)
 {
-    if(this.contentPort != null)
+    for(var i = 0; i < this.contentPorts.length; ++i)
     {
-        this.contentPort.postMessage(data);
+        this.contentPorts[i].postMessage(data);
     }
 };
 // function clear():void
@@ -105,7 +110,7 @@ var getFlashData = function(id)
 
 chrome.runtime.onConnect.addListener(function(port)
 {
-    if(port.name === 'stopflashContentScript')
+    if(port.name === 'stopflashContentScript' && port.sender.tab != null)
     {
         var data = null;
 
@@ -117,7 +122,10 @@ chrome.runtime.onConnect.addListener(function(port)
 
                 if(data != null)
                 {
-                    data.clear();
+                    if(rep['stopflashIsMainFrame'])
+                    {
+                        data.clear();
+                    }
                 }
                 else
                 {
