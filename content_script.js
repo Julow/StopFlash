@@ -13,9 +13,45 @@ var isFlash = function(element)
 };
 
 // class FlashCollection
-function FlashCollection()
+function FlashCollection(doc)
 {
     this.flashElements = []; // :Array<FlashElement>
+
+    this.add(doc.getElementsByTagName('OBJECT'));
+    this.add(doc.getElementsByTagName('EMBED'));
+
+    this.port = chrome.runtime.connect({'name': 'stopflashContentScript'});
+
+    var self = this;
+
+    var observer = new MutationObserver(function(changes)
+    {
+        var changed = false;
+
+        for(var i = 0, c; i < changes.length; ++i)
+        {
+            c = changes[i];
+
+            if(c.addedNodes != null)
+            {
+                changed = (self.add(c.addedNodes) || false);
+            }
+
+            if(c.removedNodes != null)
+            {
+                changed = (self.remove(c.removedNodes) || false);
+            }
+        }
+
+        if(changed)
+        {
+            self.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': self.getData()})
+        }
+    });
+
+    observer.observe(doc, {childList: true, subtree: true});
+
+    this.port.postMessage({'stopflashInit': true});
 }
 // function getData():Array<Object>
 FlashCollection.prototype.getData = function()
@@ -226,41 +262,7 @@ FlashElement.prototype.remove = function()
 // main
 var main = function()
 {
-    var collection = new FlashCollection();
-
-    collection.add(document.getElementsByTagName('OBJECT'));
-    collection.add(document.getElementsByTagName('EMBED'));
-
-    var port = chrome.runtime.connect({'name': 'stopflashContentScript'});
-
-    var observer = new MutationObserver(function(changes)
-    {
-        var changed = false;
-
-        for(var i = 0, c; i < changes.length; ++i)
-        {
-            c = changes[i];
-
-            if(c.addedNodes != null)
-            {
-                changed = (collection.add(c.addedNodes) || false);
-            }
-
-            if(c.removedNodes != null)
-            {
-                changed = (collection.remove(c.removedNodes) || false);
-            }
-        }
-
-        if(changed)
-        {
-            port.postMessage({'stopflashDataUpdate': true, 'stopflashData': collection.getData()})
-        }
-    });
-
-    observer.observe(document, {childList: true, subtree: true});
-
-    port.postMessage({'stopflashInit': true});
+    var collection = new FlashCollection(document);
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
