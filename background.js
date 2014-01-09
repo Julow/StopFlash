@@ -8,7 +8,12 @@
 
 function StopFlashBackground()
 {
-    this.tabs = [];
+    this.tabs = []; // :Array<StopFlashTab>
+}
+
+function StopFlashTab()
+{
+    this.frames = [];
 }
 
 /*
