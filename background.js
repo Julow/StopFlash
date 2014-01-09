@@ -63,8 +63,19 @@ BackgroundFlashData.prototype.clear = function()
 {
     this.data = null;
 
-    this.popupPort.disconnect();
+    if(this.popupPort != null)
+    {
+        this.popupPort.disconnect();
+    }
+
     this.popupPort = null;
+
+    if(this.contentPort != null)
+    {
+        this.contentPort.disconnect();
+    }
+
+    this.contentPort = null;
 };
 
 var flashData = []; // :Array<BackgroundFlashData>
