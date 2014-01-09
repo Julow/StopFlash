@@ -100,16 +100,28 @@ chrome.runtime.onConnect.addListener(function(port)
     }
     else if(port.name === 'stopflashPopup')
     {
+        var data = null;
+
         port.onMessage.addListener(function(rep)
         {
             if(rep['stopflashInit'])
             {
-                var data = getFlashData(rep['stopflashInit']);
+                data = getFlashData(rep['stopflashInit']);
 
                 if(data != null)
                 {
                     data.setPopup(port);
                 }
+            }
+
+            if(rep['stopflashBlock'])
+            {
+                //
+            }
+
+            if(rep['stopflashUnblock'])
+            {
+                //
             }
         });
     }
