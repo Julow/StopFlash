@@ -6,6 +6,11 @@
  * background.js
  */
 
+function StopFlashBackground()
+{
+    this.tabs = [];
+}
+
 /*
 function BackgroundFlashData(id)
 {
