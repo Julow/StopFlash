@@ -13,6 +13,7 @@ function BackgroundFlashData(id)
     this.data = null; // :Object
 
     this.popupPort = null; // :chrome.runtime.Port
+    this.contentPort = null; // :chrome.runtime.Port
 }
 // function setData(Object data):void
 BackgroundFlashData.prototype.setData = function(data)
@@ -34,6 +35,20 @@ BackgroundFlashData.prototype.setPopup = function(popupPort)
     });
 
     this.sendToPopup();
+};
+// function setContentScript(chrome.runtime.Port contentPort):void
+BackgroundFlashData.prototype.setContentScript = function(contentPort)
+{
+    this.contentPort = contentPort;
+
+    var self = this;
+
+    this.contentPort.onDisconnect.addListener(function()
+    {
+        self.contentPort = null;
+    });
+
+    this.sendToContent({'stopflashWhitelist': whitelist});
 };
 // function sendToPopup():void
 BackgroundFlashData.prototype.sendToPopup = function()
@@ -90,6 +105,8 @@ chrome.runtime.onConnect.addListener(function(port)
 
                     flashData.push(data);
                 }
+
+                data.setContentScript(port);
             }
 
             if(rep['stopflashDataUpdate'] && rep['stopflashData'])
