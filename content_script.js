@@ -323,9 +323,11 @@ FlashElement.prototype.remove = function()
 };
 
 // main
+var collection = null;
+
 var main = function()
 {
-    var collection = new FlashCollection(document);
+    collection = new FlashCollection(document);
 };
 
 document.addEventListener('DOMContentLoaded', main, false);
