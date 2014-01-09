@@ -123,20 +123,19 @@ var ui = new StopFlashUI()
 
 ui.content.setTab(0);
 
-chrome.runtime.onConnect.addListener(function(port)
-{
-    port.onMessage.addListener(function(rep)
-    {
-        if(rep['stopflashDataSend'] && rep['stopflashData'])
-        {
-            ui.setElements(rep['stopflashData']);
-        }
-    });
-});
+ui.setElements(null);
 
 chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
 {
     var port = chrome.runtime.connect({'name': 'stopflashPopup'});
+
+    port.onMessage.addListener(function(rep)
+    {
+        if(rep['stopflashData'])
+        {
+            ui.setElements(rep['stopflashData']);
+        }
+    });
 
     port.postMessage({'stopflashInit': tabs[0].id});
 });
