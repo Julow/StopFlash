@@ -6,6 +6,8 @@
  * content_script.js
  */
 
+var whitelist = []; // :Array<String>
+
 // function isFlash(HTMLElement element):boolean
 var isFlash = function(element)
 {
@@ -17,15 +19,21 @@ function FlashCollection(doc)
 {
     this.flashElements = []; // :Array<FlashElement>
 
-    this.add(doc.getElementsByTagName('OBJECT'));
-    this.add(doc.getElementsByTagName('EMBED'));
-
     this.port = chrome.runtime.connect({'name': 'stopflashContentScript'});
 
     var self = this;
 
     this.port.onMessage.addListener(function(req)
     {
+        if(req['stopflashWhitelist'])
+        {
+            whitelist = req['stopflashWhitelist'];
+
+            // init
+            self.add(doc.getElementsByTagName('OBJECT'));
+            self.add(doc.getElementsByTagName('EMBED'));
+        }
+
         if(req['stopflashBlock'])
         {
             for(var i = 0, e; i < req['stopflashBlock'].length; ++i)
@@ -76,7 +84,7 @@ function FlashCollection(doc)
 
         if(changed)
         {
-            self.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': self.getData()})
+            self.sendData();
         }
     });
 
