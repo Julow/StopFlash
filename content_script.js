@@ -32,6 +32,8 @@ function FlashCollection(doc)
             // init
             self.add(doc.getElementsByTagName('OBJECT'));
             self.add(doc.getElementsByTagName('EMBED'));
+
+            self.port.postMessage({'stopflashHaveChange': true, 'stopflashIsMainFrame': (window == window.top)});
         }
 
         if(req['stopflashDataUpdate'])
@@ -66,7 +68,7 @@ function FlashCollection(doc)
         }
     });
 
-    this.port.postMessage({'stopflashHaveChange': true, 'stopflashIsMainFrame': (window == window.top)});
+    this.port.postMessage({'stopflashInit': true, 'stopflashIsMainFrame': (window == window.top)});
 
     var observer = new MutationObserver(function(changes)
     {
