@@ -6,48 +6,11 @@
  * background.js
  */
 
-var frameId = 0;
-
-function StopFlashBackground()
-{
-    this.tabs = []; // :Array<StopFlashTab>
-
-    var self = this;
-
-    chrome.runtime.onConnect.addListener(function(port)
-    {
-        if(port.name === 'stopflashContentScript' && port.sender.tab != null)
-        {
-            // Init
-        }
-    });
-}
-
-function StopFlashTab()
-{
-    this.frames = []; // :Array<StopFlashFrame>
-}
-// function newTab():StopFlashFrame
-StopFlashTab.prototype.newTab = function()
-{
-    var frame = new StopFlashFrame(++frameId);
-
-    this.frames.push(frame);
-
-    return frame;
-};
-
-function StopFlashFrame(id)
-{
-    this.id = id; // :int
-}
-
-/*
 function BackgroundFlashData(id)
 {
     this.id = id; // :int
 
-    this.data = null; // :Object
+    this.data = []; // :Array<Object>
 
     this.popupPort = null; // :chrome.runtime.Port
     this.contentPorts = []; // :Array<chrome.runtime.Port>
@@ -55,7 +18,7 @@ function BackgroundFlashData(id)
 // function setData(Object data):void
 BackgroundFlashData.prototype.setData = function(data)
 {
-    this.data = data;
+    this.data.push(data);
 
     this.sendToPopup();
 };
@@ -120,12 +83,15 @@ BackgroundFlashData.prototype.clear = function()
 
     this.popupPort = null;
 
-    if(this.contentPort != null)
+    if(this.contentPorts.length > 0)
     {
-        this.contentPort.disconnect();
+        for(var i = 0; i < this.contentPorts.length; ++i)
+        {
+            this.contentPorts[i].disconnect();
+        }
     }
 
-    this.contentPort = null;
+    this.contentPort = [];
 };
 
 var flashData = []; // :Array<BackgroundFlashData>
@@ -176,9 +142,9 @@ chrome.runtime.onConnect.addListener(function(port)
 
             if(rep['stopflashHaveChange'])
             {
-                data.data = null;
+                data.data = [];
 
-                data.sendToContent({'stopflashDataUpdate'});
+                data.sendToContent({'stopflashDataUpdate': true});
             }
 
             if(rep['stopflashDataUpdate'] && rep['stopflashData'])
@@ -215,4 +181,3 @@ chrome.runtime.onConnect.addListener(function(port)
         });
     }
 });
-*/
