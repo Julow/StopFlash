@@ -11,6 +11,16 @@ var frameId = 0;
 function StopFlashBackground()
 {
     this.tabs = []; // :Array<StopFlashTab>
+
+    var self = this;
+
+    chrome.runtime.onConnect.addListener(function(port)
+    {
+        if(port.name === 'stopflashContentScript' && port.sender.tab != null)
+        {
+            // Init
+        }
+    });
 }
 
 function StopFlashTab()
