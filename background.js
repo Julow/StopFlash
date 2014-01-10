@@ -18,7 +18,7 @@ function BackgroundFlashData(id)
 // function setData(Object data):void
 BackgroundFlashData.prototype.setData = function(data)
 {
-    this.data.push(data);
+    Array.prototype.unshift.apply(this.data, data);
 
     this.sendToPopup();
 };
@@ -142,7 +142,10 @@ chrome.runtime.onConnect.addListener(function(port)
 
             if(rep['stopflashHaveChange'])
             {
-                data.data = [];
+                if(rep['stopflashIsMainFrame'])
+                {
+                    data.data = [];
+                }
 
                 data.sendToContent({'stopflashDataUpdate': true});
             }
