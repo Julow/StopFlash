@@ -201,6 +201,7 @@ var styles = [
 // class FlashElement
 function FlashElement(element)
 {
+    this.parent = element.parentNode; // :HTMLElement
     this.element = element; // :HTMLElement
     this.nextSibling = element.nextSibling; // :HTMLElement
 
@@ -285,28 +286,18 @@ FlashElement.prototype.getUrl = function()
 // function block():void
 FlashElement.prototype.block = function()
 {
-    var parent = this.element.parentNode || this.replacement.parentNode;
+    this.parent.insertBefore(this.replacement, this.nextSibling);
 
-    if(parent != null)
-    {
-        parent.insertBefore(this.replacement, this.nextSibling);
-
-        parent.removeChild(this.element);
-    }
+    this.parent.removeChild(this.element);
 
     this.blocked = true;
 };
 // function unblock():void
 FlashElement.prototype.unblock = function()
 {
-    var parent = this.replacement.parentNode || this.element.parentNode;
+    this.parent.insertBefore(this.element, this.nextSibling);
 
-    if(parent != null)
-    {
-        parent.insertBefore(this.element, this.nextSibling);
-
-        parent.removeChild(this.replacement);
-    }
+    this.parent.removeChild(this.replacement);
 
     this.blocked = false;
 };
