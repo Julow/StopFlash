@@ -165,7 +165,7 @@ FlashCollection.prototype.remove = function(elements)
     {
         f = this.get(elements[i]);
 
-        if(f != null)
+        if(f != null && !f.blocked)
         {
             f.remove();
 
@@ -286,20 +286,20 @@ FlashElement.prototype.getUrl = function()
 // function block():void
 FlashElement.prototype.block = function()
 {
+    this.blocked = true;
+
     this.parent.insertBefore(this.replacement, this.nextSibling);
 
     this.parent.removeChild(this.element);
-
-    this.blocked = true;
 };
 // function unblock():void
 FlashElement.prototype.unblock = function()
 {
+    this.blocked = false;
+
     this.parent.insertBefore(this.element, this.nextSibling);
 
     this.parent.removeChild(this.replacement);
-
-    this.blocked = false;
 };
 // function remove():void
 FlashElement.prototype.remove = function()
