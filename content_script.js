@@ -7,6 +7,7 @@
  */
 
 var whitelist = []; // :Array<String>
+var elementId = 0; // :int
 
 // function isFlash(HTMLElement element):boolean
 var isFlash = function(element)
@@ -136,7 +137,7 @@ FlashCollection.prototype.add = function(elements)
 
             if(f == null)
             {
-                f = new FlashElement(e);
+                f = new FlashElement(++elementId, e);
 
                 this.flashElements.push(f);
 
@@ -199,8 +200,10 @@ var styles = [
 ]; // :Array<String>
 
 // class FlashElement
-function FlashElement(element)
+function FlashElement(id, element)
 {
+    this.id = id;
+
     this.parent = element.parentNode; // :HTMLElement
     this.element = element; // :HTMLElement
     this.nextSibling = element.nextSibling; // :HTMLElement
