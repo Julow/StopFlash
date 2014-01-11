@@ -143,14 +143,17 @@ FlashCollection.prototype.add = function(elements)
             {
                 f = new FlashElement(this, ++this.elementId, e);
 
-                this.flashElements.push(f);
-
-                if(!f.isWhitelist())
+                if(f.isValid())
                 {
-                    f.block();
-                }
+                    this.flashElements.push(f);
 
-                changed = true;
+                    if(!f.isWhitelist())
+                    {
+                        f.block();
+                    }
+
+                    changed = true;
+                }
             }
             else if(f.blocked)
             {
@@ -251,6 +254,11 @@ function FlashElement(collection, id, element)
 
     this.replacement = replacement.node;
 }
+// function isValid():boolean
+FlashElement.prototype.isValid = function()
+{
+    return (this.parent != null && this.getUrl() != null);
+};
 // function getData():Object
 FlashElement.prototype.getData = function()
 {
