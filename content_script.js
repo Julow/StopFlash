@@ -234,6 +234,7 @@ function FlashElement(id, element)
 FlashElement.prototype.getData = function()
 {
     return {
+        'id': this.id,
         'type': this.element.nodeName,
         'url': this.getUrl(),
         'blocked': this.blocked,
