@@ -196,7 +196,7 @@ FlashCollection.prototype.get = function(element)
 // function getById(int id)
 FlashCollection.prototype.getById = function(id)
 {
-    for(var i = 0; < i this.flashElements.length; ++i)
+    for(var i = 0; i < this.flashElements.length; ++i)
     {
         if(id === this.flashElements[i].id)
         {
@@ -240,6 +240,8 @@ function FlashElement(collection, id, element)
         .event('click', function()
         {
             self.unblock();
+
+            self.collection.requestChange();
         });
 
     for(var i = 0; i < styles.length; ++i)
