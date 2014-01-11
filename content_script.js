@@ -6,9 +6,6 @@
  * content_script.js
  */
 
-var whitelist = []; // :Array<String>
-var elementId = 0; // :int
-
 // function isFlash(HTMLElement element):boolean
 var isFlash = function(element)
 {
@@ -22,13 +19,17 @@ function FlashCollection(doc)
 
     this.port = chrome.runtime.connect({'name': 'stopflashContentScript'});
 
+    this.elementId = 0; // :int
+
+    this.whitelist = []; // :Array<String>
+
     var self = this;
 
     this.port.onMessage.addListener(function(req)
     {
         if(req['stopflashWhitelist'])
         {
-            whitelist = req['stopflashWhitelist'];
+            self.whitelist = req['stopflashWhitelist'];
 
             // init
             self.add(doc.getElementsByTagName('OBJECT'));
@@ -140,7 +141,7 @@ FlashCollection.prototype.add = function(elements)
 
             if(f == null)
             {
-                f = new FlashElement(++elementId, e);
+                f = new FlashElement(this, ++this.elementId, e);
 
                 this.flashElements.push(f);
 
@@ -216,8 +217,10 @@ var styles = [
 ]; // :Array<String>
 
 // class FlashElement
-function FlashElement(id, element)
+function FlashElement(collection, id, element)
 {
+    this.collection = collection;
+
     this.id = id;
 
     this.parent = element.parentNode; // :HTMLElement
@@ -262,9 +265,9 @@ FlashElement.prototype.isWhitelist = function()
 {
     var url = this.getUrl();
 
-    for(var i = 0; i < whitelist.length; ++i)
+    for(var i = 0; i < this.collection.whitelist.length; ++i)
     {
-        if(whitelist[i].indexOf(url) >= 0)
+        if(this.collection.whitelist[i].indexOf(url) >= 0)
         {
             return true;
         }
