@@ -36,7 +36,7 @@
         }
     ],
 
-    "web_accessible_resources": ["icons/stopflash_64.png"],
+    "web_accessible_resources": ["icons/stopflash_128.png", "icons/stopflash_64.png", "icons/stopflash_48.png", "icons/stopflash_32.png", "icons/stopflash_16.png"],
 
     "browser_action":
     {
