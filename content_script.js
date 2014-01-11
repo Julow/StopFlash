@@ -34,7 +34,7 @@ function FlashCollection(doc)
             self.add(doc.getElementsByTagName('OBJECT'));
             self.add(doc.getElementsByTagName('EMBED'));
 
-            self.port.postMessage({'stopflashHaveChange': true, 'stopflashIsMainFrame': (window == window.top)});
+            self.requestChange();
         }
 
         if(req['stopflashDataUpdate'])
@@ -49,6 +49,8 @@ function FlashCollection(doc)
             if(e != null)
             {
                 e.block();
+
+                self.requestChange();
             }
         }
 
@@ -59,6 +61,8 @@ function FlashCollection(doc)
             if(e != null)
             {
                 e.unblock();
+
+                self.requestChange();
             }
         }
     });
@@ -94,6 +98,11 @@ function FlashCollection(doc)
 
     this.sendData();
 }
+// function requestChange():void
+FlashCollection.prototype.requestChange = function()
+{
+    this.port.postMessage({'stopflashHaveChange': true, 'stopflashIsMainFrame': (window == window.top)});
+};
 // function sendData():void
 FlashCollection.prototype.sendData = function()
 {
