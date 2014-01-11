@@ -213,11 +213,12 @@ FlashCollection.prototype.getById = function(id)
 var styles = [
     'float', 'clear',
     'position', 'top', 'left',
-    'width', 'height',
     'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
     'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
     'border-top', 'border-right', 'border-bottom', 'border-left'
 ]; // :Array<String>
+
+var iconSizes = [128, 64, 48];
 
 // class FlashElement
 function FlashElement(collection, id, element)
@@ -234,12 +235,30 @@ function FlashElement(collection, id, element)
 
     var self = this;
 
+    var width = parseInt(Builder.getStyle(element, 'width'));
+    var height = parseInt(Builder.getStyle(element, 'height'));
+
+    var size = 32;
+
+    for(var i = 0, s; i < iconSizes.length; ++i)
+    {
+        s = iconSizes[i];
+
+        if(s < width && s < height)
+        {
+            size = s;
+            break;
+        }
+    }
+
     var replacement = new Builder('div')
         .css('display', 'block')
+        .css('width', width +'px')
+        .css('height', height +'px')
         .css('cursor', 'pointer')
-        .css('min-width', '64px')
-        .css('min-height', '64px')
-        .css('background', '#333 url("'+ chrome.extension.getURL('icons/stopflash_64.png') +'") center center no-repeat')
+        .css('min-width', '34px')
+        .css('min-height', '34px')
+        .css('background', '#333 url("'+ chrome.extension.getURL('icons/stopflash_'+ size +'.png') +'") center center no-repeat')
         .event('click', function()
         {
             self.unblock();
