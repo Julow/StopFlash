@@ -189,6 +189,19 @@ FlashCollection.prototype.get = function(element)
 
     return null;
 };
+// function getById(int id)
+FlashCollection.prototype.getById = function(id)
+{
+    for(var i = 0; < i this.flashElements.length; ++i)
+    {
+        if(id === this.flashElements[i].id)
+        {
+            return this.flashElements[i];
+        }
+    }
+
+    return null;
+};
 
 var styles = [
     'float', 'clear',
