@@ -44,27 +44,21 @@ function FlashCollection(doc)
 
         if(req['stopflashBlock'])
         {
-            for(var i = 0, e; i < req['stopflashBlock'].length; ++i)
-            {
-                e = self.get(req['stopflashBlock'][i]);
+            var e = self.getById(req['stopflashBlock']);
 
-                if(e != null)
-                {
-                    e.block();
-                }
+            if(e != null)
+            {
+                e.block();
             }
         }
 
         if(req['stopflashUnblock'])
         {
-            for(var i = 0, e; i < req['stopflashUnblock'].length; ++i)
-            {
-                e = self.get(req['stopflashUnblock'][i]);
+            var e = self.getById(req['stopflashUnblock']);
 
-                if(e != null)
-                {
-                    e.unblock();
-                }
+            if(e != null)
+            {
+                e.unblock();
             }
         }
     });
