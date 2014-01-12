@@ -6,6 +6,34 @@
  * stopflash.js
  */
 
+// class StopFlashPopup
+function StopFlashPopup(doc)
+{
+    this.ui = new StopFlashUI()
+            .insert(doc.body);
+
+    this.ui.content.setTab(0);
+
+    this.ui.setElements(null);
+
+    var self = this;
+
+    chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
+    {
+        var port = chrome.runtime.connect({'name': 'stopflashPopup'});
+
+        port.onMessage.addListener(function(rep)
+        {
+            if(rep['stopflashData'])
+            {
+                self.ui.setElements(rep['stopflashData']);
+            }
+        });
+
+        port.postMessage({'stopflashInit': tabs[0].id});
+    });
+}
+
 // class StopFlashUI extends Builder
 function StopFlashUI()
 {
@@ -139,24 +167,4 @@ StopFlashTabs.prototype.setTab = function(index)
 fus.extend(StopFlashTabs, Builder);
 
 // main
-var ui = new StopFlashUI()
-    .insert(document.body);
-
-ui.content.setTab(0);
-
-ui.setElements(null);
-
-chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
-{
-    var port = chrome.runtime.connect({'name': 'stopflashPopup'});
-
-    port.onMessage.addListener(function(rep)
-    {
-        if(rep['stopflashData'])
-        {
-            ui.setElements(rep['stopflashData']);
-        }
-    });
-
-    port.postMessage({'stopflashInit': tabs[0].id});
-});
+var popup = new StopFlashPopup(document);
