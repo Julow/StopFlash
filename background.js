@@ -6,9 +6,10 @@
  * background.js
  */
 
-function BackgroundFlashData(id)
+function BackgroundFlashData(id, collectionId)
 {
     this.id = id; // :int
+    this.collectionId = collectionId; // :int
 
     this.data = []; // :Array<Object>
 
@@ -56,7 +57,7 @@ BackgroundFlashData.prototype.setContentScript = function(contentPort)
         }
     });
 
-    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': ++contentId});
+    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': this.collectionId});
 };
 // function sendToPopup():void
 BackgroundFlashData.prototype.sendToPopup = function()
@@ -99,7 +100,7 @@ BackgroundFlashData.prototype.clear = function()
 
 var flashData = []; // :Array<BackgroundFlashData>
 var whitelist = []; // :Array<String>
-var contentId = 0; // :int
+var collectionId = 0; // :int
 
 // function getFlashData(int id):BackgroundFlashData
 var getFlashData = function(id)
@@ -136,7 +137,7 @@ chrome.runtime.onConnect.addListener(function(port)
                 }
                 else
                 {
-                    data = new BackgroundFlashData(port.sender.tab.id);
+                    data = new BackgroundFlashData(port.sender.tab.id, ++collectionId);
 
                     flashData.push(data);
                 }
