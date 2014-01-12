@@ -23,6 +23,8 @@ function FlashCollection(doc)
 
     this.whitelist = []; // :Array<String>
 
+    this.id = 0; // :int
+
     var self = this;
 
     this.port.onMessage.addListener(function(req)
@@ -30,6 +32,7 @@ function FlashCollection(doc)
         if(req['stopflashWhitelist'])
         {
             self.whitelist = req['stopflashWhitelist'];
+            self.id = req['stopflashContentId'];
 
             // init
             self.add(doc.getElementsByTagName('OBJECT'));
@@ -282,6 +285,7 @@ FlashElement.prototype.isValid = function()
 FlashElement.prototype.getData = function()
 {
     return {
+        'collection': this.collection.id,
         'id': this.id,
         'type': this.element.nodeName,
         'url': this.getUrl(),
