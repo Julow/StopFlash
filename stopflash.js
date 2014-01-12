@@ -56,22 +56,33 @@ function StopFlashUI()
 // function setElements(Array<Object> elements):void
 StopFlashUI.prototype.setElements = function(elements)
 {
+    this.mainTab.clear();
+
     if(elements != null && elements.length > 0)
     {
-        var html = '<table>';
-
         for(var i = 0, e; i < elements.length; ++i)
         {
             e = elements[i];
 
-            html += '<tr><td>'+ e.url +'</td><td>'+ e.type +'</td><td>'+ (e.whitelist? '[Whitelist] ' : '') + (e.blocked? 'Bloqué' : 'Autorisé') +'</td></tr>';
+            this.mainTab.append(new Builder('div')
+                .className('flash-element')
+                .append(new Builder('div')
+                    .className('flash-menu')
+                    .append(new Builder('a')
+                        .text(e.blocked? 'Débloquer' : 'Bloquer'))
+                    .append(new Builder('a')
+                        .text(e.whitelist? '- Whitelist' : '+ Whitelist')))
+                .append(new Builder('p')
+                    .className('flash-url')
+                    .text(e.url))
+                .append(new Builder('span')
+                    .className('flash-type')
+                    .text(e.type)));
         }
-
-        this.mainTab.html(html +'</table>');
     }
     else
     {
-        this.mainTab.html('<p>Aucun element trouvé sur cette page</p>');
+        this.mainTab.append(new Builder('p').text('Aucun element trouvé sur cette page'));
     }
 };
 fus.extend(StopFlashUI, Builder);
