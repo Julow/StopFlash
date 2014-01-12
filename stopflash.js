@@ -9,16 +9,18 @@
 // class StopFlashPopup
 function StopFlashPopup(doc)
 {
-    this.ui = new StopFlashUI()
+    this.ui = new StopFlashUI(this)
             .insert(doc.body);
+
+    this.port = null; // :chrome.runtime.Port
 
     var self = this;
 
     chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
     {
-        var port = chrome.runtime.connect({'name': 'stopflashPopup'});
+        self.port = chrome.runtime.connect({'name': 'stopflashPopup'});
 
-        port.onMessage.addListener(function(rep)
+        self.port.onMessage.addListener(function(rep)
         {
             if(rep['stopflashData'])
             {
@@ -26,14 +28,16 @@ function StopFlashPopup(doc)
             }
         });
 
-        port.postMessage({'stopflashInit': tabs[0].id});
+        self.port.postMessage({'stopflashInit': tabs[0].id});
     });
 }
 
 // class StopFlashUI extends Builder
-function StopFlashUI()
+function StopFlashUI(popup)
 {
     this.super('div');
+
+    this.popup = popup;
 
     this.mainTab = new Builder('div');
 
@@ -92,9 +96,9 @@ StopFlashUI.prototype.setElements = function(elements)
         this.mainTab.append(new Builder('p')
             .text(elements.length + ((elements.length > 1)? ' elements trouvés' : ' element trouvé')))
 
-        for(var i = 0, e; i < elements.length; ++i)
+        for(var i = 0; i < elements.length; ++i)
         {
-            e = elements[i];
+            var e = elements[i];
 
             this.mainTab.append(new Builder('div')
                 .className('flash-element')
@@ -111,7 +115,14 @@ StopFlashUI.prototype.setElements = function(elements)
                         .text(e.blocked? 'Débloquer' : 'Bloquer')
                         .event('click', function()
                         {
-                            //
+                            if(e.blocked)
+                            {
+                                self.popup.port.postMessage({'stopflashUnblock': e.id});
+                            }
+                            else
+                            {
+                                self.popup.port.postMessage({'stopflashBlock': e.id});
+                            }
                         }))
                     .append(new Builder('a')
                         .text(e.whitelist? '- Whitelist' : '+ Whitelist')
