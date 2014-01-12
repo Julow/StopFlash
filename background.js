@@ -74,9 +74,9 @@ BackgroundFlashData.prototype.sendToPopup = function()
 // function sendToContent(Object data):void
 BackgroundFlashData.prototype.sendToContent = function(data)
 {
-    for(var i = 0; i < this.contentPorts.length; ++i)
+    for(var i = 0; i < this.collections.length; ++i)
     {
-        this.contentPorts[i].postMessage(data);
+        this.collections[i].port.postMessage(data);
     }
 };
 // function clear():void
