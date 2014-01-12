@@ -60,6 +60,8 @@ StopFlashUI.prototype.setElements = function(elements)
 
     if(elements != null && elements.length > 0)
     {
+        var self = this;
+
         for(var i = 0, e; i < elements.length; ++i)
         {
             e = elements[i];
@@ -69,9 +71,17 @@ StopFlashUI.prototype.setElements = function(elements)
                 .append(new Builder('div')
                     .className('flash-menu')
                     .append(new Builder('a')
-                        .text(e.blocked? 'Débloquer' : 'Bloquer'))
+                        .text(e.blocked? 'Débloquer' : 'Bloquer')
+                        .event('click', function()
+                        {
+                            //
+                        }))
                     .append(new Builder('a')
-                        .text(e.whitelist? '- Whitelist' : '+ Whitelist')))
+                        .text(e.whitelist? '- Whitelist' : '+ Whitelist')
+                        .event('click', function()
+                        {
+                            //
+                        })))
                 .append(new Builder('p')
                     .className('flash-url')
                     .text(e.url))
