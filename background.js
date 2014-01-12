@@ -7,8 +7,10 @@
  */
 
 // class BackgroundFlashCollection
-function BackgroundFlashCollection(id, port)
+function BackgroundFlashCollection(background, id, port)
 {
+    this.background = background; // :StopFlashBackground
+
     this.id = id; // :int
 
     this.port = port; // :chrome.runtime.Port
