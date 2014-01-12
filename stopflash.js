@@ -12,10 +12,6 @@ function StopFlashPopup(doc)
     this.ui = new StopFlashUI()
             .insert(doc.body);
 
-    this.ui.content.setTab(0);
-
-    this.ui.setElements(null);
-
     var self = this;
 
     chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
@@ -47,7 +43,8 @@ function StopFlashUI()
         .addTab(new Builder('div')
             .text('Whitelist tab'))
         .addTab(new Builder('div')
-            .text('Options tab'));
+            .text('Options tab'))
+        .setTab(0);
 
     var self = this;
 
@@ -80,6 +77,8 @@ function StopFlashUI()
         .append(new Builder('div')
             .className('foot')
             .html('<a href="https://github.com/JWhile/StopFlash">https://github.com/JWhile/StopFlash</a>'));
+
+    this.setElements(null);
 }
 // function setElements(Array<Object> elements):void
 StopFlashUI.prototype.setElements = function(elements)
