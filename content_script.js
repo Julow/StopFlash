@@ -223,9 +223,9 @@ var iconSizes = [128, 64, 48];
 // class FlashElement
 function FlashElement(collection, id, element)
 {
-    this.collection = collection;
+    this.collection = collection; // :FlashCollection
 
-    this.id = id;
+    this.id = id; // :int
 
     this.parent = element.parentNode; // :HTMLElement
     this.element = element; // :HTMLElement
@@ -271,7 +271,7 @@ function FlashElement(collection, id, element)
         replacement.css(styles[i], Builder.getStyle(element, styles[i]));
     }
 
-    this.replacement = replacement.node;
+    this.replacement = replacement.node; // :HTMLElement
 }
 // function isValid():boolean
 FlashElement.prototype.isValid = function()
