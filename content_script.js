@@ -48,7 +48,7 @@ function FlashCollection(doc)
 
         if(req['stopflashBlock'])
         {
-            var e = self.getById(req['stopflashBlock']);
+            var e = self.getById(req['stopflashBlock'].id);
 
             if(e != null)
             {
@@ -60,7 +60,7 @@ function FlashCollection(doc)
 
         if(req['stopflashUnblock'])
         {
-            var e = self.getById(req['stopflashUnblock']);
+            var e = self.getById(req['stopflashUnblock'].id);
 
             if(e != null)
             {
