@@ -78,33 +78,35 @@ a:hover{
             color:#222;
         }
             .flash-element{
-                margin:5px 0;
-                padding:0 5px;
+                padding:4px 5px;
                 background:rgba(70,70,70,0.1);
+                border-top:1px solid #333;
                 transition-property:background,box-shadow;
                 transition-duration:.15s;
             }
             .flash-element:hover{
-                background:rgba(0,0,0,0.1);
+                background:rgba(70,70,70,0.2);
                 box-shadow:0 0 3px rgba(0,0,0,0.1);
             }
+                .flash-url{
+                    color:#bbb;
+                }
+                .flash-type{
+                    color:#333;
+                }
                 .flash-menu{
                     float:right;
                     text-align:right;
                 }
                     .flash-menu a{
-                        display:block;
+                        display:inline-block;
+                        margin:0 3px;
                         color:#3a3a3a;
                         transition:color .25s;
                     }
                     .flash-menu a:hover{
-                        color:#acacac;
+                        color:#bbb;
                     }
-                .flash-url{
-                }
-                .flash-type{
-                    color:#333;
-                }
 .foot{
     padding:2px 5px 3px 0;
     background:#333;
