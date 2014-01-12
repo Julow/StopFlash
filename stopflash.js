@@ -117,11 +117,11 @@ StopFlashUI.prototype.setElements = function(elements)
                         {
                             if(e.blocked)
                             {
-                                self.popup.port.postMessage({'stopflashUnblock': e.id});
+                                self.popup.port.postMessage({'stopflashUnblock': e});
                             }
                             else
                             {
-                                self.popup.port.postMessage({'stopflashBlock': e.id});
+                                self.popup.port.postMessage({'stopflashBlock': e});
                             }
                         }))
                     .append(new Builder('a')
