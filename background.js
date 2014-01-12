@@ -18,9 +18,12 @@ function BackgroundFlashData(id)
 // function setData(Object data):void
 BackgroundFlashData.prototype.setData = function(data)
 {
-    Array.prototype.unshift.apply(this.data, data);
+    if(data.length > 0)
+    {
+        Array.prototype.unshift.apply(this.data, data);
 
-    this.sendToPopup();
+        this.sendToPopup();
+    }
 };
 // function setPopup(chrome.runtime.Port popupPort):void
 BackgroundFlashData.prototype.setPopup = function(popupPort)
