@@ -6,10 +6,19 @@
  * background.js
  */
 
-// class BackgroundFlashCollection(id)
-function BackgroundFlashCollection(id)
+// class BackgroundFlashCollection
+function BackgroundFlashCollection(id, port)
 {
-    this.id = id;
+    this.id = id; // :int
+
+    this.port = port; // :chrome.runtime.Port
+
+    var self = this;
+
+    port.onDisconnect.addListener(function()
+    {
+        self.port = null;
+    });
 };
 
 // class BackgroundFlashData
@@ -19,8 +28,9 @@ function BackgroundFlashData(id)
 
     this.data = []; // :Array<Object>
 
+    this.collections = []; // :Array<BackgroundFlashCollection>
+
     this.popupPort = null; // :chrome.runtime.Port
-    this.contentPorts = []; // :Array<chrome.runtime.Port>
 }
 // function setData(Object data):void
 BackgroundFlashData.prototype.setData = function(data)
@@ -49,19 +59,7 @@ BackgroundFlashData.prototype.setPopup = function(popupPort)
 // function setContentScript(chrome.runtime.Port contentPort):void
 BackgroundFlashData.prototype.setContentScript = function(contentPort)
 {
-    this.contentPorts.push(contentPort);
-
-    var self = this;
-
-    contentPort.onDisconnect.addListener(function()
-    {
-        var index = self.contentPorts.indexOf(contentPort);
-
-        if(index >= 0)
-        {
-            self.contentPorts.splice(index, 1);
-        }
-    });
+    this.collections.push(new BackgroundFlashCollection(++collectionId, contentPort));
 
     contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': 0});
 };
