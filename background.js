@@ -28,6 +28,8 @@ function BackgroundFlashData(id)
 
     this.data = []; // :Array<Object>
 
+    this.collectionId = 0; // :int
+
     this.collections = []; // :Array<BackgroundFlashCollection>
 
     this.popupPort = null; // :chrome.runtime.Port
@@ -59,7 +61,7 @@ BackgroundFlashData.prototype.setPopup = function(popupPort)
 // function setContentScript(chrome.runtime.Port contentPort):void
 BackgroundFlashData.prototype.setContentScript = function(contentPort)
 {
-    this.collections.push(new BackgroundFlashCollection(++collectionId, contentPort));
+    this.collections.push(new BackgroundFlashCollection(++this.collectionId, contentPort));
 
     contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': 0});
 };
@@ -104,7 +106,6 @@ BackgroundFlashData.prototype.clear = function()
 
 var flashData = []; // :Array<BackgroundFlashData>
 var whitelist = []; // :Array<String>
-var collectionId = 0; // :int
 
 // function getFlashData(int id):BackgroundFlashData
 var getFlashData = function(id)
