@@ -33,8 +33,6 @@ function StopFlashBackground(id)
     this.collectionId = 0; // :int
 
     this.collections = []; // :Array<BackgroundFlashCollection>
-
-    this.popupPort = null; // :chrome.runtime.Port
 }
 // function setData(Object data):void
 StopFlashBackground.prototype.setData = function(data)
@@ -46,20 +44,6 @@ StopFlashBackground.prototype.setData = function(data)
         this.sendToPopup();
     }
 };
-// function setPopup(chrome.runtime.Port popupPort):void
-StopFlashBackground.prototype.setPopup = function(popupPort)
-{
-    this.popupPort = popupPort;
-
-    var self = this;
-
-    this.popupPort.onDisconnect.addListener(function()
-    {
-        self.popupPort = null;
-    });
-
-    this.sendToPopup();
-};
 // function setContentScript(chrome.runtime.Port contentPort):void
 StopFlashBackground.prototype.setContentScript = function(contentPort)
 {
@@ -70,7 +54,7 @@ StopFlashBackground.prototype.setContentScript = function(contentPort)
 // function sendToPopup():void
 StopFlashBackground.prototype.sendToPopup = function()
 {
-    if(this.popupPort != null)
+    if(popupPort != null)
     {
         var data = [];
 
@@ -79,27 +63,20 @@ StopFlashBackground.prototype.sendToPopup = function()
             Array.prototype.unshift.apply(data, this.collections[i].data);
         }
 
-        this.popupPort.postMessage({'stopflashData': data});
+        popupPort.postMessage({'stopflashData': data});
     }
 };
-// function sendToContent(Object data):void
-StopFlashBackground.prototype.sendToContent = function(data)
+// function sendToContent(Object msg):void
+StopFlashBackground.prototype.sendToContent = function(msg)
 {
     for(var i = 0; i < this.collections.length; ++i)
     {
-        this.collections[i].port.postMessage(data);
+        this.collections[i].port.postMessage(msg);
     }
 };
 // function clear():void
 StopFlashBackground.prototype.clear = function()
 {
-    if(this.popupPort != null)
-    {
-        this.popupPort.disconnect();
-    }
-
-    this.popupPort = null;
-
     if(this.collections.length > 0)
     {
         for(var i = 0; i < this.collections.length; ++i)
@@ -113,6 +90,7 @@ StopFlashBackground.prototype.clear = function()
 
 var backgrounds = []; // :Array<StopFlashBackground>
 var whitelist = []; // :Array<String>
+var popupPort = null; // :chrome.runtime.Port
 
 // function getBackground(int id):StopFlashBackground
 var getBackground = function(id)
@@ -128,6 +106,7 @@ var getBackground = function(id)
     return null;
 };
 
+// main
 chrome.runtime.onConnect.addListener(function(port)
 {
     if(port.name === 'stopflashContentScript' && port.sender.tab != null)
@@ -161,7 +140,7 @@ chrome.runtime.onConnect.addListener(function(port)
             {
                 if(rep['stopflashIsMainFrame'])
                 {
-                    data.data = [];
+                    data.clear();
                 }
 
                 data.sendToContent({'stopflashDataUpdate': true});
@@ -185,7 +164,14 @@ chrome.runtime.onConnect.addListener(function(port)
 
                 if(data != null)
                 {
-                    data.setPopup(port);
+                    popupPort = port;
+
+                    port.onDisconnect.addListener(function()
+                    {
+                        popupPort = null;
+                    });
+
+                    data.sendToPopup();
                 }
             }
 
