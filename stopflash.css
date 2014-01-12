@@ -8,6 +8,7 @@ body{
 }
 p{
     margin:0;
+    padding:0 0 0 5px;
 }
 a{
     cursor:pointer;
@@ -90,9 +91,10 @@ a:hover{
             }
                 .flash-url{
                     overflow:hidden;
+                    padding:0;
+                    text-overflow:ellipsis;
                     color:#bbb;
                     white-space:nowrap;
-                    text-overflow:ellipsis;
                 }
                 .flash-type{
                     color:#333;
