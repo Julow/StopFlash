@@ -89,12 +89,22 @@ StopFlashUI.prototype.setElements = function(elements)
     {
         var self = this;
 
+        this.mainTab.append(new Builder('p')
+            .text(elements.length + ((elements.length > 1)? ' elements trouvés' : ' element trouvé')))
+
         for(var i = 0, e; i < elements.length; ++i)
         {
             e = elements[i];
 
             this.mainTab.append(new Builder('div')
                 .className('flash-element')
+                .append(new Builder('p')
+                    .className('flash-url')
+                    .set('title', e.url)
+                    .text(e.url))
+                .append(new Builder('span')
+                    .className('flash-type')
+                    .text(e.type))
                 .append(new Builder('div')
                     .className('flash-menu')
                     .append(new Builder('a')
@@ -108,13 +118,7 @@ StopFlashUI.prototype.setElements = function(elements)
                         .event('click', function()
                         {
                             //
-                        })))
-                .append(new Builder('p')
-                    .className('flash-url')
-                    .text(e.url))
-                .append(new Builder('span')
-                    .className('flash-type')
-                    .text(e.type)));
+                        }))));
         }
     }
     else
