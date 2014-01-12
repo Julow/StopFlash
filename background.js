@@ -13,6 +13,8 @@ function BackgroundFlashCollection(background, id, port)
 
     this.id = id; // :int
 
+    this.data = []; // :Array<Object>
+
     this.port = port; // :chrome.runtime.Port
 
     var self = this;
@@ -27,8 +29,6 @@ function BackgroundFlashCollection(background, id, port)
 function StopFlashBackground(id)
 {
     this.id = id; // :int
-
-    this.data = []; // :Array<Object>
 
     this.collectionId = 0; // :int
 
@@ -72,7 +72,14 @@ StopFlashBackground.prototype.sendToPopup = function()
 {
     if(this.popupPort != null)
     {
-        this.popupPort.postMessage({'stopflashData': this.data});
+        var data = [];
+
+        for(var i = 0; i < this.collections.length; ++i)
+        {
+            Array.prototype.unshift.apply(data, this.collections[i].data);
+        }
+
+        this.popupPort.postMessage({'stopflashData': data});
     }
 };
 // function sendToContent(Object data):void
@@ -86,8 +93,6 @@ StopFlashBackground.prototype.sendToContent = function(data)
 // function clear():void
 StopFlashBackground.prototype.clear = function()
 {
-    this.data = null;
-
     if(this.popupPort != null)
     {
         this.popupPort.disconnect();
