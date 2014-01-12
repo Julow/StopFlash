@@ -91,15 +91,15 @@ BackgroundFlashData.prototype.clear = function()
 
     this.popupPort = null;
 
-    if(this.contentPorts.length > 0)
+    if(this.collections.length > 0)
     {
-        for(var i = 0; i < this.contentPorts.length; ++i)
+        for(var i = 0; i < this.collections.length; ++i)
         {
-            this.contentPorts[i].disconnect();
+            this.collections[i].port.disconnect();
         }
     }
 
-    this.contentPort = [];
+    this.collections = [];
 };
 
 var flashData = []; // :Array<BackgroundFlashData>
