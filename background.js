@@ -56,7 +56,7 @@ BackgroundFlashData.prototype.setContentScript = function(contentPort)
         }
     });
 
-    contentPort.postMessage({'stopflashWhitelist': whitelist});
+    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': ++contentId});
 };
 // function sendToPopup():void
 BackgroundFlashData.prototype.sendToPopup = function()
@@ -99,6 +99,7 @@ BackgroundFlashData.prototype.clear = function()
 
 var flashData = []; // :Array<BackgroundFlashData>
 var whitelist = []; // :Array<String>
+var contentId = 0; // :int
 
 // function getFlashData(int id):BackgroundFlashData
 var getFlashData = function(id)
