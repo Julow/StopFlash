@@ -6,10 +6,16 @@
  * background.js
  */
 
-function BackgroundFlashData(id, collectionId)
+// class BackgroundFlashCollection(id)
+function BackgroundFlashCollection(id)
+{
+    this.id = id;
+};
+
+// class BackgroundFlashData
+function BackgroundFlashData(id)
 {
     this.id = id; // :int
-    this.collectionId = collectionId; // :int
 
     this.data = []; // :Array<Object>
 
@@ -57,7 +63,7 @@ BackgroundFlashData.prototype.setContentScript = function(contentPort)
         }
     });
 
-    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': this.collectionId});
+    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': 0});
 };
 // function sendToPopup():void
 BackgroundFlashData.prototype.sendToPopup = function()
@@ -137,7 +143,7 @@ chrome.runtime.onConnect.addListener(function(port)
                 }
                 else
                 {
-                    data = new BackgroundFlashData(port.sender.tab.id, ++collectionId);
+                    data = new BackgroundFlashData(port.sender.tab.id);
 
                     flashData.push(data);
                 }
@@ -179,6 +185,7 @@ chrome.runtime.onConnect.addListener(function(port)
 
             if(rep['stopflashBlock'])
             {
+
                 data.sendToContent({'stopflashBlock': rep['stopflashBlock']});
             }
 
