@@ -32,17 +32,12 @@ function FlashCollection(doc)
         if(req['stopflashWhitelist'])
         {
             self.whitelist = req['stopflashWhitelist'];
-            self.id = req['stopflashContentId'];
+            self.id = req['stopflashCollectionId'];
 
             // init
             self.add(doc.getElementsByTagName('OBJECT'));
             self.add(doc.getElementsByTagName('EMBED'));
 
-            self.requestChange();
-        }
-
-        if(req['stopflashDataUpdate'])
-        {
             self.sendData();
         }
 
@@ -54,7 +49,7 @@ function FlashCollection(doc)
             {
                 e.block();
 
-                self.requestChange();
+                self.sendData();
             }
         }
 
@@ -66,7 +61,7 @@ function FlashCollection(doc)
             {
                 e.unblock();
 
-                self.requestChange();
+                self.sendData();
             }
         }
     });
@@ -102,11 +97,6 @@ function FlashCollection(doc)
 
     this.sendData();
 }
-// function requestChange():void
-FlashCollection.prototype.requestChange = function()
-{
-    this.port.postMessage({'stopflashHaveChange': true, 'stopflashIsMainFrame': (window == window.top)});
-};
 // function sendData():void
 FlashCollection.prototype.sendData = function()
 {
@@ -117,7 +107,7 @@ FlashCollection.prototype.sendData = function()
         data.push(this.flashElements[i].getData());
     }
 
-    this.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': data});
+    this.port.postMessage({'stopflashDataUpdate': true, 'stopflashData': data, 'stopflashCollectionId': this.id});
 };
 // function add(NodeList elements):boolean
 FlashCollection.prototype.add = function(elements)
@@ -266,7 +256,7 @@ function FlashElement(collection, id, element)
         {
             self.unblock();
 
-            self.collection.requestChange();
+            self.collection.sendData();
         });
 
     for(var i = 0; i < styles.length; ++i)
