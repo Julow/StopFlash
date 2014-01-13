@@ -45,9 +45,11 @@ function StopFlashUI(popup)
         .className('content')
         .addTab(this.mainTab)
         .addTab(new Builder('div')
-            .text('Whitelist tab'))
+            .append(new Builder('p')
+                .text('La whitelist n\'est pas encore implentée.')))
         .addTab(new Builder('div')
-            .text('Options tab'))
+            .append(new Builder('p')
+                .text('Aucune option pour l\'instant.')))
         .setTab(0);
 
     var self = this;
@@ -145,7 +147,7 @@ function StopFlashElement(popup, data)
                 .text(this.data.whitelist? '- Whitelist' : '+ Whitelist')
                 .event('click', function()
                 {
-                    //
+                    self.popup.ui.content.setTab(1);
                 })));
 }
 fus.extend(StopFlashElement, Builder);
