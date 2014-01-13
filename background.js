@@ -34,16 +34,6 @@ function StopFlashBackground(id)
 
     this.collections = []; // :Array<BackgroundFlashCollection>
 }
-// function setData(Object data):void
-StopFlashBackground.prototype.setData = function(data)
-{
-    if(data.length > 0)
-    {
-        Array.prototype.unshift.apply(this.data, data);
-
-        this.sendToPopup();
-    }
-};
 // function addContentScript(chrome.runtime.Port contentPort):void
 StopFlashBackground.prototype.addContentScript = function(contentPort)
 {
