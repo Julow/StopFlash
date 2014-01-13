@@ -42,6 +42,6 @@
     {
         "default_title": "Dites StopFlash !",
         "default_icon": "icons/stopflash_32.png",
-        "default_popup": "stopflash.html"
+        "default_popup": "popup.html"
     }
 }
