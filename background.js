@@ -180,13 +180,22 @@ chrome.runtime.onConnect.addListener(function(port)
 
             if(rep['stopflashBlock'])
             {
+                var collection = data.getCollection(rep['stopflashBlock'].collection);
 
-                data.sendToContent({'stopflashBlock': rep['stopflashBlock']});
+                if(collection != null)
+                {
+                    collection.port.postMessage(rep);
+                }
             }
 
             if(rep['stopflashUnblock'])
             {
-                data.sendToContent({'stopflashUnblock': rep['stopflashUnblock']});
+                var collection = data.getCollection(rep['stopflashUnblock'].collection);
+
+                if(collection != null)
+                {
+                    collection.port.postMessage(rep);
+                }
             }
         });
     }
