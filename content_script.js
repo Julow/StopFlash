@@ -148,9 +148,14 @@ FlashCollection.prototype.add = function(elements)
                     changed = true;
                 }
             }
-            else if(f.blocked)
+            else
             {
-                f.block();
+                f.update();
+
+                if(f.blocked)
+                {
+                    f.block();
+                }
             }
         }
     }
@@ -328,6 +333,20 @@ FlashElement.prototype.getUrl = function()
     }
 
     return null;
+};
+// function update():void
+FlashElement.prototype.update = function()
+{
+    if(this.element.parentNode)
+    {
+        this.parent = this.element.parentNode;
+        this.nextSibling = this.element.nextSibling;
+    }
+    else if(this.replacement.parentNode)
+    {
+        this.parent = this.replacement.parentNode;
+        this.nextSibling = this.replacement.nextSibling;
+    }
 };
 // function block():void
 FlashElement.prototype.block = function()
