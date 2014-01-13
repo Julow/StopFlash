@@ -54,7 +54,7 @@ StopFlashBackground.prototype.addContentScript = function(contentPort)
 
     this.collections.push(new BackgroundFlashCollection(id, contentPort));
 
-    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': id});
+    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashCollectionId': id});
 };
 // function sendToPopup():void
 StopFlashBackground.prototype.sendToPopup = function()
@@ -141,19 +141,13 @@ chrome.runtime.onConnect.addListener(function(port)
                 data.addContentScript(port);
             }
 
-            if(rep['stopflashHaveChange'])
-            {
-                if(rep['stopflashIsMainFrame'])
-                {
-                    data.clear();
-                }
-
-                data.sendToContent({'stopflashDataUpdate': true});
-            }
-
             if(rep['stopflashDataUpdate'] && rep['stopflashData'])
             {
-                data.setData(rep.stopflashData);
+                var collection = data.getCollection(rep['stopflashCollectionId']);
+
+                collection.data = rep.stopflashData;
+
+                data.sendToPopup();
             }
         });
     }
