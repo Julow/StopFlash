@@ -34,12 +34,27 @@ function StopFlashBackground(id)
 
     this.collections = []; // :Array<BackgroundFlashCollection>
 }
+// function getCollection(int id):BackgroundFlashCollection
+StopFlashBackground.prototype.getCollection = function(id)
+{
+    for(var i = 0; i < this.collections.length; ++i)
+    {
+        if(collections[i].id === id)
+        {
+            return collections[i];
+        }
+    }
+
+    return null;
+};
 // function addContentScript(chrome.runtime.Port contentPort):void
 StopFlashBackground.prototype.addContentScript = function(contentPort)
 {
-    this.collections.push(new BackgroundFlashCollection(++this.collectionId, contentPort));
+    var id = ++this.collectionId;
 
-    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': 0});
+    this.collections.push(new BackgroundFlashCollection(id, contentPort));
+
+    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashContentId': id});
 };
 // function sendToPopup():void
 StopFlashBackground.prototype.sendToPopup = function()
