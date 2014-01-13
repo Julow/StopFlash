@@ -19,6 +19,16 @@ function BackgroundFlashCollection(background, id, port)
 
     var self = this;
 
+    port.onMessage.addListener(function(msg)
+    {
+        if(msg['stopflashDataUpdate'] && msg['stopflashData'])
+        {
+            self.data = msg.stopflashData;
+
+            self.background.sendToPopup();
+        }
+    });
+
     port.onDisconnect.addListener(function()
     {
         self.port = null;
@@ -142,18 +152,6 @@ chrome.runtime.onConnect.addListener(function(port)
                 }
 
                 data.addContentScript(port);
-            }
-
-            if(rep['stopflashDataUpdate'] && rep['stopflashData'])
-            {
-                var collection = data.getCollection(rep['stopflashCollectionId']);
-
-                if(collection != null)
-                {
-                    collection.data = rep.stopflashData;
-
-                    data.sendToPopup();
-                }
             }
         });
     }
