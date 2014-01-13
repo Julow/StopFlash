@@ -86,7 +86,10 @@ StopFlashBackground.prototype.clear = function()
     {
         for(var i = 0; i < this.collections.length; ++i)
         {
-            this.collections[i].port.disconnect();
+            if(this.collections[i].port != null)
+            {
+                this.collections[i].port.disconnect();
+            }
         }
     }
 
@@ -162,7 +165,7 @@ chrome.runtime.onConnect.addListener(function(port)
         {
             if(rep['stopflashInit'])
             {
-                data = getFlashData(rep['stopflashInit']);
+                data = getBackground(rep['stopflashInit']);
 
                 if(data != null)
                 {
