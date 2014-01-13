@@ -98,38 +98,7 @@ StopFlashUI.prototype.setElements = function(elements)
 
         for(var i = 0; i < elements.length; ++i)
         {
-            var e = elements[i];
-
-            this.mainTab.append(new Builder('div')
-                .className('flash-element')
-                .append(new Builder('p')
-                    .className('flash-url')
-                    .set('title', e.url)
-                    .text(e.url))
-                .append(new Builder('span')
-                    .className('flash-type')
-                    .text(e.type))
-                .append(new Builder('div')
-                    .className('flash-menu')
-                    .append(new Builder('a')
-                        .text(e.blocked? 'Débloquer' : 'Bloquer')
-                        .event('click', function()
-                        {
-                            if(e.blocked)
-                            {
-                                self.popup.port.postMessage({'stopflashUnblock': e});
-                            }
-                            else
-                            {
-                                self.popup.port.postMessage({'stopflashBlock': e});
-                            }
-                        }))
-                    .append(new Builder('a')
-                        .text(e.whitelist? '- Whitelist' : '+ Whitelist')
-                        .event('click', function()
-                        {
-                            //
-                        }))));
+            this.mainTab.append(new StopFlashElement(this.popup, elements[i]));
         }
     }
     else
@@ -138,6 +107,48 @@ StopFlashUI.prototype.setElements = function(elements)
     }
 };
 fus.extend(StopFlashUI, Builder);
+
+// class StopFlashElement extends Builder
+function StopFlashElement(popup, data)
+{
+    this.super('div');
+
+    this.popup = popup; // :StopFlashPopup
+    this.data = data; // :Object
+
+    var self = this;
+
+    this.className('flash-element')
+        .append(new Builder('p')
+            .className('flash-url')
+            .set('title', this.data.url)
+            .text(this.data.url))
+        .append(new Builder('span')
+            .className('flash-type')
+            .text(this.data.type))
+        .append(new Builder('div')
+            .className('flash-menu')
+            .append(new Builder('a')
+                .text(this.data.blocked? 'Débloquer' : 'Bloquer')
+                .event('click', function()
+                {
+                    if(self.data.blocked)
+                    {
+                        self.popup.port.postMessage({'stopflashUnblock': self.data});
+                    }
+                    else
+                    {
+                        self.popup.port.postMessage({'stopflashBlock': self.data});
+                    }
+                }))
+            .append(new Builder('a')
+                .text(this.data.whitelist? '- Whitelist' : '+ Whitelist')
+                .event('click', function()
+                {
+                    //
+                })));
+}
+fus.extend(StopFlashElement, Builder);
 
 // class StopFlashTabs extends Builder
 function StopFlashTabs()
