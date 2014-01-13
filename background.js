@@ -23,7 +23,7 @@ function BackgroundFlashCollection(background, id, port)
     {
         self.port = null;
     });
-};
+}
 
 // class StopFlashBackground
 function StopFlashBackground(id)
@@ -44,8 +44,8 @@ StopFlashBackground.prototype.setData = function(data)
         this.sendToPopup();
     }
 };
-// function setContentScript(chrome.runtime.Port contentPort):void
-StopFlashBackground.prototype.setContentScript = function(contentPort)
+// function addContentScript(chrome.runtime.Port contentPort):void
+StopFlashBackground.prototype.addContentScript = function(contentPort)
 {
     this.collections.push(new BackgroundFlashCollection(++this.collectionId, contentPort));
 
@@ -133,7 +133,7 @@ chrome.runtime.onConnect.addListener(function(port)
                     backgrounds.push(data);
                 }
 
-                data.setContentScript(port);
+                data.addContentScript(port);
             }
 
             if(rep['stopflashHaveChange'])
