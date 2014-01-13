@@ -39,9 +39,9 @@ StopFlashBackground.prototype.getCollection = function(id)
 {
     for(var i = 0; i < this.collections.length; ++i)
     {
-        if(collections[i].id === id)
+        if(this.collections[i].id === id)
         {
-            return collections[i];
+            return this.collections[i];
         }
     }
 
@@ -52,7 +52,7 @@ StopFlashBackground.prototype.addContentScript = function(contentPort)
 {
     var id = ++this.collectionId;
 
-    this.collections.push(new BackgroundFlashCollection(id, contentPort));
+    this.collections.push(new BackgroundFlashCollection(this, id, contentPort));
 
     contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashCollectionId': id});
 };
@@ -145,9 +145,12 @@ chrome.runtime.onConnect.addListener(function(port)
             {
                 var collection = data.getCollection(rep['stopflashCollectionId']);
 
-                collection.data = rep.stopflashData;
+                if(collection != null)
+                {
+                    collection.data = rep.stopflashData;
 
-                data.sendToPopup();
+                    data.sendToPopup();
+                }
             }
         });
     }
