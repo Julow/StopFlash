@@ -17,7 +17,7 @@ function FlashCollection(doc)
 {
     this.flashElements = []; // :Array<FlashElement>
 
-    this.port = chrome.runtime.connect({'name': 'stopflashContentScript'});
+    this.port = chrome.runtime.connect({'name': 'stopflashContentScript'}); // :chrome.runtime.Port
 
     this.elementId = 0; // :int
 
@@ -89,7 +89,7 @@ function FlashCollection(doc)
 
         if(changed)
         {
-            self.port.postMessage({'stopflashHaveChange': true});
+            self.sendData();
         }
     });
 
@@ -211,7 +211,7 @@ var styles = [
     'border-top', 'border-right', 'border-bottom', 'border-left'
 ]; // :Array<String>
 
-var iconSizes = [128, 64, 48];
+var iconSizes = [128, 64, 48]; // :Array<int>
 
 // class FlashElement
 function FlashElement(collection, id, element)
