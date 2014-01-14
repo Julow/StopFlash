@@ -96,6 +96,10 @@ a:hover{
                     color:#bbb;
                     white-space:nowrap;
                 }
+                 .expend{
+                    white-space:normal;
+                    word-break:break-all;
+                 }
                 .flash-type{
                     color:#333;
                 }

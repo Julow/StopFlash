@@ -118,13 +118,31 @@ function StopFlashElement(popup, data)
     this.popup = popup; // :StopFlashPopup
     this.data = data; // :Object
 
+    this.url = new Builder('p');
+    this.expend = false;
+
     var self = this;
 
     this.className('flash-element')
-        .append(new Builder('p')
+        .append(this.url
             .className('flash-url')
             .set('title', this.data.url)
-            .text(this.data.url))
+            .text(this.data.url)
+            .event('click', function()
+            {
+                if(self.expend)
+                {
+                    self.url.className('flash-url');
+                }
+                else
+                {
+                    self.url.className('flash-url expend');
+
+                    selectText(self.url.node);
+                }
+
+                self.expend = !self.expend;
+            }))
         .append(new Builder('span')
             .className('flash-type')
             .text(this.data.type))
