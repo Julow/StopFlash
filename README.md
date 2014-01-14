@@ -7,6 +7,15 @@ Réactivez flash quand vous en avez besoin !
 
 Extension pour Google Chrome.
 
+### Get it!
+
+_..._
+
+### Capture
+
+![Interface](captures/interface.png)
+Interface de __StopFlash__.
+
 ### License
 
 > The MIT License (MIT)
