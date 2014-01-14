@@ -66,19 +66,24 @@ StopFlashBackground.prototype.addContentScript = function(contentPort)
 
     contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashCollectionId': id});
 };
+// function getData():Array<Object>
+StopFlashBackground.prototype.getData = function()
+{
+    var data = [];
+
+    for(var i = 0; i < this.collections.length; ++i)
+    {
+        Array.prototype.unshift.apply(data, this.collections[i].data);
+    }
+
+    return data;
+};
 // function sendToPopup():void
 StopFlashBackground.prototype.sendToPopup = function()
 {
     if(popupPort != null)
     {
-        var data = [];
-
-        for(var i = 0; i < this.collections.length; ++i)
-        {
-            Array.prototype.unshift.apply(data, this.collections[i].data);
-        }
-
-        popupPort.postMessage({'stopflashData': data});
+        popupPort.postMessage({'stopflashData': this.getData()});
     }
 };
 // function sendToContent(Object msg):void
