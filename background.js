@@ -85,6 +85,13 @@ StopFlashBackground.prototype.sendToPopup = function()
     {
         popupPort.postMessage({'stopflashData': this.getData()});
     }
+
+    var len = this.getData().length;
+
+    chrome.browserAction.setBadgeText({
+      'text': (len > 0)? ''+ len : '',
+      'tabId': this.id
+    });
 };
 // function sendToContent(Object msg):void
 StopFlashBackground.prototype.sendToContent = function(msg)
@@ -130,24 +137,6 @@ var getBackground = function(id)
 };
 
 // main
-chrome.tabs.onHighlighted.addListener(function(info)
-{
-    var data = getBackground(info.tabIds[0]);
-
-    if(data != null)
-    {
-        chrome.browserAction.setBadgeText({
-          'text': data.getData() || ''
-        });
-    }
-    else
-    {
-        chrome.browserAction.setBadgeText({
-          'text': ''
-        });
-    }
-});
-
 chrome.runtime.onConnect.addListener(function(port)
 {
     if(port.name === 'stopflashContentScript' && port.sender.tab != null)
