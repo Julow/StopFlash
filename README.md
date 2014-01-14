@@ -9,7 +9,8 @@ Extension pour Google Chrome.
 
 ### Get it!
 
-_..._
+__StopFlash Flash Blocker__ est dans le Chrome Web Store:
+[StopFlash Flash Blocker](https://chrome.google.com/webstore/detail/stopflash-flash-blocker/oiiohfpnbijbgdidjfcpcljcfbmkaooi)
 
 ### Capture
 
