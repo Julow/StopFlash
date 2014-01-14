@@ -4,3 +4,6 @@
 [submodule "libs/Fus"]
 	path = libs/Fus
 	url = git@github.com:JWhile/Fus.git
+[submodule "libs/selectText"]
+	path = libs/selectText
+	url = https://gist.github.com/8415008.git
