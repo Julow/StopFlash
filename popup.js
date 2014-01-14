@@ -47,9 +47,6 @@ function StopFlashUI(popup)
         .addTab(new Builder('div')
             .append(new Builder('p')
                 .text('La whitelist n\'est pas encore implentée.')))
-        .addTab(new Builder('div')
-            .append(new Builder('p')
-                .text('Aucune option pour l\'instant.')))
         .setTab(0);
 
     var self = this;
@@ -72,12 +69,6 @@ function StopFlashUI(popup)
                 .event('click', function()
                 {
                     self.content.setTab(1);
-                }))
-            .append(new Builder('a')
-                .text('Options')
-                .event('click', function()
-                {
-                    self.content.setTab(2);
                 })))
         .append(this.content)
         .append(new Builder('div')
