@@ -1,4 +1,5 @@
 body{
+    overflow-x:hidden;
     width:300px;
     margin:0;
     background:#333 url('icons/stopflash_64.png') center center no-repeat;
@@ -19,11 +20,14 @@ a:hover{
 }
 .head{
     padding:5px 0 2px 10px;
-    background:#333;
-    border-bottom:1px solid #161616;
+    background:#3a3a3a;
+    border-bottom:1px solid #111;
+    box-shadow:0 0 7px #111;
     transition:color .2s;
 }
     .logo{
+        display:inline-block;
+        padding:0 30px 0 0;
         line-height:14px;
     }
         .logo b{
@@ -44,18 +48,12 @@ a:hover{
          .head:hover .logo span{
             opacity:1;
          }
-.menu{
-    background:#3a3a3a;
-    box-shadow:0 0 7px #111;
-    border-bottom:1px solid #222;
-    text-align:center;
-}
-    .menu a{
+    .head a{
         display:inline-block;
         margin:0 5px;
         padding:2px 5px;
     }
-    .menu a:hover{
+    .head a:hover{
         color:#e9e9e9;
     }
 .content{
@@ -120,6 +118,7 @@ a:hover{
     padding:2px 5px 3px 0;
     background:#333;
     border-top:1px solid #161616;
+    box-shadow:0 0 5px #222;
     text-align:right;
     font-size:11px;
 }
