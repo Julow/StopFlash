@@ -81,15 +81,15 @@ StopFlashBackground.prototype.getData = function()
 // function sendToPopup():void
 StopFlashBackground.prototype.sendToPopup = function()
 {
+    var data = this.getData();
+
     if(popupPort != null)
     {
-        popupPort.postMessage({'stopflashData': this.getData()});
+        popupPort.postMessage({'stopflashData': data});
     }
 
-    var len = this.getData().length;
-
     chrome.browserAction.setBadgeText({
-      'text': (len > 0)? ''+ len : '',
+      'text': (data.length > 0)? ''+ data.length : '',
       'tabId': this.id
     });
 };
