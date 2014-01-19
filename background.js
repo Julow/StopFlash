@@ -151,102 +151,112 @@ var isWhitelist = function(url)
 };
 
 // main
-chrome.runtime.onConnect.addListener(function(port)
+var main = function()
 {
-    if(port.name === 'stopflashContentScript' && port.sender.tab != null)
+    var w = localStorage.getItem('stopflashWhitelist');
+    whitelist = (w == null)? [] : w.split(';');
+
+    chrome.runtime.onConnect.addListener(function(port)
     {
-        var data = null;
-
-        port.onMessage.addListener(function(rep)
+        if(port.name === 'stopflashContentScript' && port.sender.tab != null)
         {
-            if(rep['stopflashInit'])
-            {
-                data = getBackground(port.sender.tab.id);
+            var data = null;
 
-                if(data != null)
+            port.onMessage.addListener(function(rep)
+            {
+                if(rep['stopflashInit'])
                 {
-                    if(rep['stopflashIsMainFrame'])
+                    data = getBackground(port.sender.tab.id);
+
+                    if(data != null)
                     {
-                        data.clear();
+                        if(rep['stopflashIsMainFrame'])
+                        {
+                            data.clear();
+                        }
+                    }
+                    else
+                    {
+                        data = new StopFlashBackground(port.sender.tab);
+
+                        backgrounds.push(data);
+                    }
+
+                    data.addContentScript(port);
+                }
+            });
+        }
+        else if(port.name === 'stopflashPopup')
+        {
+            var data = null;
+
+            port.onMessage.addListener(function(rep)
+            {
+                if(rep['stopflashInit'])
+                {
+                    data = getBackground(rep['stopflashInit']);
+
+                    if(data != null)
+                    {
+                        popupPort = port;
+
+                        port.onDisconnect.addListener(function()
+                        {
+                            popupPort = null;
+                        });
+
+                        data.sendToPopup();
                     }
                 }
-                else
+
+                if(typeof rep['stopflashSetWhitelist'] === 'boolean')
                 {
-                    data = new StopFlashBackground(port.sender.tab);
-
-                    backgrounds.push(data);
-                }
-
-                data.addContentScript(port);
-            }
-        });
-    }
-    else if(port.name === 'stopflashPopup')
-    {
-        var data = null;
-
-        port.onMessage.addListener(function(rep)
-        {
-            if(rep['stopflashInit'])
-            {
-                data = getBackground(rep['stopflashInit']);
-
-                if(data != null)
-                {
-                    popupPort = port;
-
-                    port.onDisconnect.addListener(function()
+                    if(rep['stopflashSetWhitelist'])
                     {
-                        popupPort = null;
-                    });
+                        var url = new Url(data.tab.url).parse();
+
+                        whitelist.push(url.getHost());
+                    }
+                    else
+                    {
+                        for(var i = 0; i < whitelist.length; ++i)
+                        {
+                            if(data.tab.url.indexOf(whitelist[i]) >= 0)
+                            {
+                                whitelist.splice(i, 1);
+
+                                --i;
+                            }
+                        }
+                    }
+
+                    localStorage.setItem('stopflashWhitelist', whitelist.join(';'));
 
                     data.sendToPopup();
                 }
-            }
 
-            if(typeof rep['stopflashSetWhitelist'] === 'boolean')
-            {
-                if(rep['stopflashSetWhitelist'])
+                if(rep['stopflashBlock'])
                 {
-                    var url = new Url(data.tab.url).parse();
+                    var collection = data.getCollection(rep['stopflashBlock'].collection);
 
-                    whitelist.push(url.getHost());
-                }
-                else
-                {
-                    for(var i = 0; i < whitelist.length; ++i)
+                    if(collection != null)
                     {
-                        if(data.tab.url.indexOf(whitelist[i]) >= 0)
-                        {
-                            whitelist.splice(i, 1);
-
-                            --i;
-                        }
+                        collection.port.postMessage(rep);
                     }
                 }
 
-                data.sendToPopup();
-            }
-
-            if(rep['stopflashBlock'])
-            {
-                var collection = data.getCollection(rep['stopflashBlock'].collection);
-
-                if(collection != null)
+                if(rep['stopflashUnblock'])
                 {
-                    collection.port.postMessage(rep);
-                }
-            }
+                    var collection = data.getCollection(rep['stopflashUnblock'].collection);
 
-            if(rep['stopflashUnblock'])
-            {
-                var collection = data.getCollection(rep['stopflashUnblock'].collection);
-
-                if(collection != null)
-                {
-                    collection.port.postMessage(rep);
+                    if(collection != null)
+                    {
+                        collection.port.postMessage(rep);
+                    }
                 }
-            }
-        });
-    }
-});
+            });
+        }
+    });
+};
+
+main();
