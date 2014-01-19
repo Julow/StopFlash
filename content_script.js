@@ -295,7 +295,7 @@ FlashElement.prototype.isWhitelist = function()
 
     for(var i = 0; i < this.collection.whitelist.length; ++i)
     {
-        if(this.collection.whitelist[i].indexOf(url) >= 0)
+        if(url.indexOf(this.collection.whitelist[i]) >= 0)
         {
             return true;
         }
