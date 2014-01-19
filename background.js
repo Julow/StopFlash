@@ -136,6 +136,20 @@ var getBackground = function(id)
     return null;
 };
 
+// function isWhitelist(String url):boolean
+var isWhitelist = function(url)
+{
+    for(var i = 0; i < whitelist.length; ++i)
+    {
+        if(url.indexOf(whitelist[i]))
+        {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 // main
 chrome.runtime.onConnect.addListener(function(port)
 {
