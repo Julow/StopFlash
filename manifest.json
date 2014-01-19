@@ -24,7 +24,7 @@
     ],
 
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["libs/parseUrl.js/parseUrl.js", "background.js"]
     },
 
     "content_scripts": [
