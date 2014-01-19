@@ -154,7 +154,7 @@ var isWhitelist = function(url)
 var main = function()
 {
     var w = localStorage.getItem('stopflashWhitelist');
-    whitelist = (w == null)? [] : w.split(';');
+    whitelist = (w == null && w.length > 0)? [] : w.split(';');
 
     chrome.runtime.onConnect.addListener(function(port)
     {
