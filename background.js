@@ -64,7 +64,7 @@ StopFlashBackground.prototype.addContentScript = function(contentPort)
 
     this.collections.push(new BackgroundFlashCollection(this, id, contentPort));
 
-    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashCollectionId': id});
+    contentPort.postMessage({'stopflashWhitelist': whitelist, 'stopflashIsWhitelist': isWhitelist(this.tab.url), 'stopflashCollectionId': id});
 };
 // function getData():Array<Object>
 StopFlashBackground.prototype.getData = function()
