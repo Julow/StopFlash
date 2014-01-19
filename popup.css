@@ -76,6 +76,15 @@ a:hover{
             border-radius:2px;
             color:#222;
         }
+            .whitelist{
+                float:right;
+                padding-right:5px;
+                color:#3a3a3a;
+                transition:color .25s;
+            }
+            .whitelist:hover{
+                color:#bbb;
+            }
             .flash-element{
                 padding:4px 5px;
                 background:rgba(70,70,70,0.1);
@@ -105,7 +114,7 @@ a:hover{
                     float:right;
                     text-align:right;
                 }
-                    .flash-menu a{
+                    .flash-menu a,.flash-menu span{
                         display:inline-block;
                         margin:0 3px;
                         color:#3a3a3a;

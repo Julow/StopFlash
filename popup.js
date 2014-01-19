@@ -14,6 +14,8 @@ function StopFlashPopup(doc)
 
     this.port = null; // :chrome.runtime.Port
 
+    this.isWhitelist = false;
+
     var self = this;
 
     chrome.tabs.query({'highlighted': true, 'currentWindow': true}, function(tabs)
@@ -24,6 +26,8 @@ function StopFlashPopup(doc)
         {
             if(rep['stopflashData'])
             {
+                self.isWhitelist = rep['stopflashIsWhitelist'];
+
                 self.ui.setElements(rep['stopflashData']);
             }
         });
@@ -50,6 +54,13 @@ function StopFlashUI(popup)
         .setTab(0);
 
     var self = this;
+
+    this.whitelist = new Builder('a')
+        .className('whitelist')
+        .event('click', function()
+        {
+            self.popup.port.postMessage({'stopflashSetWhitelist': !self.popup.isWhitelist});
+        });
 
     this.append(new Builder('div')
             .className('head')
@@ -78,14 +89,17 @@ function StopFlashUI(popup)
 // function setElements(Array<Object> elements):void
 StopFlashUI.prototype.setElements = function(elements)
 {
-    this.mainTab.clear();
+    this.mainTab.clear()
+        .append(this.whitelist
+            .text(this.popup.isWhitelist? '- Whitelist' : '+ Whitelist')
+            .set('title', this.popup.isWhitelist? 'Retirer cette page de la whitelist' : 'Ajouter cette page a la whitelist'));
 
     if(elements != null && elements.length > 0)
     {
         var self = this;
 
         this.mainTab.append(new Builder('p')
-            .text(elements.length + ((elements.length > 1)? ' elements trouvés' : ' element trouvé')))
+            .text(elements.length + ((elements.length > 1)? ' elements trouvés' : ' element trouvé')));
 
         for(var i = 0; i < elements.length; ++i)
         {
@@ -94,7 +108,7 @@ StopFlashUI.prototype.setElements = function(elements)
     }
     else
     {
-        this.mainTab.append(new Builder('p').text('Aucun element trouvé sur cette page'));
+        this.mainTab.append(new Builder('p').text('Aucun element trouvé'));
     }
 };
 fus.extend(StopFlashUI, Builder);
@@ -150,12 +164,8 @@ function StopFlashElement(popup, data)
                         self.popup.port.postMessage({'stopflashBlock': self.data});
                     }
                 }))
-            .append(new Builder('a')
-                .text(this.data.whitelist? '- Whitelist' : '+ Whitelist')
-                .event('click', function()
-                {
-                    self.popup.ui.content.setTab(1);
-                })));
+            .append(new Builder('span')
+                .text(this.data.whitelist? '- Whitelist' : '+ Whitelist')));
 }
 fus.extend(StopFlashElement, Builder);
 
