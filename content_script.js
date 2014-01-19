@@ -22,6 +22,7 @@ function FlashCollection(doc)
     this.elementId = 0; // :int
 
     this.whitelist = []; // :Array<String>
+    this.isWhitelist = false; // :boolean
 
     this.id = 0; // :int
 
@@ -32,6 +33,7 @@ function FlashCollection(doc)
         if(req['stopflashWhitelist'])
         {
             self.whitelist = req['stopflashWhitelist'];
+            self.isWhitelist = req['stopflashIsWhitelist'];
             self.id = req['stopflashCollectionId'];
 
             // init
@@ -140,7 +142,7 @@ FlashCollection.prototype.add = function(elements)
                 {
                     this.flashElements.push(f);
 
-                    if(!f.isWhitelist())
+                    if(!f.isWhitelist() && !this.isWhitelist)
                     {
                         f.block();
                     }
