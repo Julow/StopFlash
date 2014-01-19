@@ -36,9 +36,9 @@ function BackgroundFlashCollection(background, id, port)
 }
 
 // class StopFlashBackground
-function StopFlashBackground(id)
+function StopFlashBackground(tab)
 {
-    this.id = id; // :int
+    this.tab = tab; // :int
 
     this.collectionId = 0; // :int
 
@@ -85,12 +85,12 @@ StopFlashBackground.prototype.sendToPopup = function()
 
     if(popupPort != null)
     {
-        popupPort.postMessage({'stopflashData': data});
+        popupPort.postMessage({'stopflashData': data, 'stopflashIsWhitelist': isWhitelist(this.tab.url)});
     }
 
     chrome.browserAction.setBadgeText({
       'text': (data.length > 0)? ''+ data.length : '',
-      'tabId': this.id
+      'tabId': this.tab.id
     });
 };
 // function sendToContent(Object msg):void
@@ -127,7 +127,7 @@ var getBackground = function(id)
 {
     for(var i = 0; i < backgrounds.length; ++i)
     {
-        if(backgrounds[i].id === id)
+        if(backgrounds[i].tab.id === id)
         {
             return backgrounds[i];
         }
@@ -141,7 +141,7 @@ var isWhitelist = function(url)
 {
     for(var i = 0; i < whitelist.length; ++i)
     {
-        if(url.indexOf(whitelist[i]))
+        if(url.indexOf(whitelist[i]) >= 0)
         {
             return true;
         }
@@ -172,7 +172,7 @@ chrome.runtime.onConnect.addListener(function(port)
                 }
                 else
                 {
-                    data = new StopFlashBackground(port.sender.tab.id);
+                    data = new StopFlashBackground(port.sender.tab);
 
                     backgrounds.push(data);
                 }
@@ -202,6 +202,30 @@ chrome.runtime.onConnect.addListener(function(port)
 
                     data.sendToPopup();
                 }
+            }
+
+            if(typeof rep['stopflashSetWhitelist'] === 'boolean')
+            {
+                if(rep['stopflashSetWhitelist'])
+                {
+                    var url = new Url(data.tab.url).parse();
+
+                    whitelist.push(url.getHost());
+                }
+                else
+                {
+                    for(var i = 0; i < whitelist.length; ++i)
+                    {
+                        if(data.tab.url.indexOf(whitelist[i]) >= 0)
+                        {
+                            whitelist.splice(i, 1);
+
+                            --i;
+                        }
+                    }
+                }
+
+                data.sendToPopup();
             }
 
             if(rep['stopflashBlock'])
