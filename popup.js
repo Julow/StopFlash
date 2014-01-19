@@ -83,7 +83,7 @@ function StopFlashUI(popup)
         .append(this.content)
         .append(new Builder('div')
             .className('foot')
-            .html('Créé par <a href="https://github.com/JWhile/StopFlash" target="_blank">juloo</a> - v0.1.3'));
+            .html('Créé par <a href="https://github.com/JWhile/StopFlash" target="_blank">juloo</a> - v0.1.4'));
 
     this.setElements(null);
 }
