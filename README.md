@@ -1,6 +1,6 @@
 # ![StopFlash logo](https://raw.github.com/JWhile/StopFlash/master/icons/stopflash_32.png) StopFlash
 
-_v0.1.2_
+_v0.1.3_
 
 Bloque les objets flash pour accélérer le chargement des pages.
 Réactivez flash quand vous en avez besoin !
