@@ -7,3 +7,6 @@
 [submodule "libs/selectText"]
 	path = libs/selectText
 	url = https://gist.github.com/8415008.git
+[submodule "libs/parseUrl.js"]
+	path = libs/parseUrl.js
+	url = git@github.com:JWhile/parseUrl.js.git
