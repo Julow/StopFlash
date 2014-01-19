@@ -14,7 +14,8 @@ function StopFlashPopup(doc)
 
     this.port = null; // :chrome.runtime.Port
 
-    this.isWhitelist = false;
+    this.whitelist = []; // :Array<String>
+    this.isWhitelist = false; // :boolean
 
     var self = this;
 
@@ -26,6 +27,7 @@ function StopFlashPopup(doc)
         {
             if(rep['stopflashData'])
             {
+                self.whitelist = req['stopflashWhitelist'];
                 self.isWhitelist = rep['stopflashIsWhitelist'];
 
                 self.ui.setElements(rep['stopflashData']);

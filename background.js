@@ -85,7 +85,7 @@ StopFlashBackground.prototype.sendToPopup = function()
 
     if(popupPort != null)
     {
-        popupPort.postMessage({'stopflashData': data, 'stopflashIsWhitelist': isWhitelist(this.tab.url)});
+        popupPort.postMessage({'stopflashData': data, 'stopflashIsWhitelist': isWhitelist(this.tab.url), 'stopflashWhitelist': whitelist});
     }
 
     chrome.browserAction.setBadgeText({
