@@ -9,13 +9,13 @@
 // class StopFlashPopup
 function StopFlashPopup(doc)
 {
-    this.ui = new StopFlashUI(this)
-            .insert(doc.body);
-
     this.port = null; // :chrome.runtime.Port
 
     this.whitelist = []; // :Array<String>
     this.isWhitelist = false; // :boolean
+
+    this.ui = new StopFlashUI(this)
+            .insert(doc.body);
 
     var self = this;
 
@@ -27,7 +27,7 @@ function StopFlashPopup(doc)
         {
             if(rep['stopflashData'])
             {
-                self.whitelist = req['stopflashWhitelist'];
+                self.whitelist = rep['stopflashWhitelist'];
                 self.isWhitelist = rep['stopflashIsWhitelist'];
 
                 self.ui.setElements(rep['stopflashData']);
@@ -46,13 +46,12 @@ function StopFlashUI(popup)
     this.popup = popup;
 
     this.mainTab = new Builder('div');
+    this.whitelistTab = new Builder('div');
 
     this.content = new StopFlashTabs()
         .className('content')
         .addTab(this.mainTab)
-        .addTab(new Builder('div')
-            .append(new Builder('p')
-                .text('La whitelist n\'est pas encore implentée.')))
+        .addTab(this.whitelistTab)
         .setTab(0);
 
     var self = this;
@@ -91,17 +90,19 @@ function StopFlashUI(popup)
 // function setElements(Array<Object> elements):void
 StopFlashUI.prototype.setElements = function(elements)
 {
+    var elementsCount = new Builder('p');
+
     this.mainTab.clear()
         .append(this.whitelist
             .text(this.popup.isWhitelist? '- Whitelist' : '+ Whitelist')
-            .set('title', this.popup.isWhitelist? 'Retirer cette page de la whitelist' : 'Ajouter cette page a la whitelist'));
+            .set('title', this.popup.isWhitelist? 'Retirer cette page de la whitelist' : 'Ajouter cette page a la whitelist'))
+        .append(elementsCount);
 
     if(elements != null && elements.length > 0)
     {
         var self = this;
 
-        this.mainTab.append(new Builder('p')
-            .text(elements.length + ((elements.length > 1)? ' elements trouvés' : ' element trouvé')));
+        elementsCount.text(elements.length + ((elements.length > 1)? ' elements trouvés' : ' element trouvé'));
 
         for(var i = 0; i < elements.length; ++i)
         {
@@ -110,10 +111,66 @@ StopFlashUI.prototype.setElements = function(elements)
     }
     else
     {
-        this.mainTab.append(new Builder('p').text('Aucun element trouvé'));
+        elementsCount.text('Aucun element trouvé');
+    }
+
+    this.whitelistTab.clear()
+        .append(new Builder('p')
+            .text((this.popup.whitelist.length > 0)? this.popup.whitelist.length +' element'+ ((this.popup.whitelist.length > 1)? 's' : '') +' dans la whitelist' : 'La whitelist est vide'));
+
+    for(var i = 0; i < this.popup.whitelist.length; ++i)
+    {
+        this.whitelistTab.append(new StopFlashWhitelistElement(this.popup, this.popup.whitelist[i]));
     }
 };
 fus.extend(StopFlashUI, Builder);
+
+// class StopFlashWhitelistElement extends Builder
+function StopFlashWhitelistElement(popup, dataUrl)
+{
+    this.super('div');
+
+    this.popup = popup; // :StopFlashpopup
+    this.dataUrl = dataUrl; // :String
+
+    this.url = new Builder('p'); // :Builder
+    this.expend = false; // :boolean
+
+    var self = this;
+
+    this.className('flash-element')
+        .append(this.url
+            .className('flash-url')
+            .set('title', this.dataUrl)
+            .text(this.dataUrl)
+            .event('click', function()
+            {
+                if(self.expend)
+                {
+                    self.url.className('flash-url');
+                }
+                else
+                {
+                    self.url.className('flash-url expend');
+
+                    selectText(self.url.node);
+                }
+
+                self.expend = !self.expend;
+            }))
+        .append(new Builder('span')
+            .className('flash-type')
+            .text('Page'))
+        .append(new Builder('div')
+            .className('flash-menu')
+            .append(new Builder('a')
+                .text('- Whitelist')
+                .event('click', function()
+                {
+                    self.popup.port.postMessage({'stopflashSetWhitelist': !self.popup.isWhitelist});
+                })));
+}
+fus.extend(StopFlashWhitelistElement, Builder);
 
 // class StopFlashElement extends Builder
 function StopFlashElement(popup, data)
@@ -123,8 +180,8 @@ function StopFlashElement(popup, data)
     this.popup = popup; // :StopFlashPopup
     this.data = data; // :Object
 
-    this.url = new Builder('p');
-    this.expend = false;
+    this.url = new Builder('p'); // :Builder
+    this.expend = false; // :boolean
 
     var self = this;
 
