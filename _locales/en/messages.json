@@ -1,0 +1,35 @@
+{
+	"slogan": {
+		"message": "Say StopFlash ! Block flash objects"
+	},
+	"title": {
+		"message": "StopFlash !"
+	},
+	"by": {
+		"message": "By $1 - $2"
+	},
+	"moins_whitelist": {
+		"message": "Retirer cette page de la whitelist"
+	},
+	"add_whitelist": {
+		"message": "Whitelist this page"
+	},
+	"finds": {
+		"message": "Find $1 elements"
+	},
+	"find": {
+		"message": "Find $1 element"
+	},
+	"whitelists": {
+		"message": "$1 whitelisted elements"
+	},
+	"whitelist": {
+		"message": "$1 whitelisted element"
+	},
+	"unlock": {
+		"message": "Unblock"
+	},
+	"lock": {
+		"message": "Block"
+	}
+}

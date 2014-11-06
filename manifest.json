@@ -3,12 +3,13 @@
 
     "name": "StopFlash Flash Blocker",
     "short_name": "StopFlash",
-    "description": "Dites StopFlash ! Bloque les objets flash pour accélérer le chargement des pages",
+    "description": "__MSG_slogan__",
     "author": "juloo",
 
+    "default_locale": "en",
     "offline_enabled": true,
 
-    "version": "0.1.4",
+    "version": "0.1.5",
 
     "icons":
     {
@@ -40,7 +41,7 @@
 
     "browser_action":
     {
-        "default_title": "Dites StopFlash !",
+        "default_title": "__MSG_title__",
         "default_icon": "icons/stopflash_32.png",
         "default_popup": "popup.html"
     }

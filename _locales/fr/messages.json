@@ -1,0 +1,35 @@
+{
+	"slogan": {
+		"message": "Dites StopFlash ! Bloque les objets flash pour accélérer le chargement des pages"
+	},
+	"title": {
+		"message": "Dites StopFlash !"
+	},
+	"by": {
+		"message": "Créé par $1 - $2"
+	},
+	"moins_whitelist": {
+		"message": "Retirer cette page de la whitelist"
+	},
+	"add_whitelist": {
+		"message": "Ajouter cette page a la whitelist"
+	},
+	"finds": {
+		"message": "$1 elements trouvés"
+	},
+	"find": {
+		"message": "$1 element trouvé"
+	},
+	"whitelists": {
+		"message": "$1 elements dans la whitelist"
+	},
+	"whitelist": {
+		"message": "$1 element dans la whitelist"
+	},
+	"unlock": {
+		"message": "Débloquer"
+	},
+	"lock": {
+		"message": "Bloquer"
+	}
+}
