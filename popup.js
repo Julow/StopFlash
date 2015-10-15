@@ -1,7 +1,7 @@
 /**
  * StopFlash
  *
- * https://github.com/JWhile/StopFlash
+ * https://github.com/Julow/StopFlash
  *
  * stopflash.js
  */
@@ -83,7 +83,7 @@ function StopFlashUI(popup)
 		.append(this.content)
 		.append(new Builder('div')
 			.className('foot')
-			.html(chrome.i18n.getMessage('by', ['<a href="https://github.com/JWhile/StopFlash" target="_blank">juloo</a>', 'v0.1.5'])));
+			.html(chrome.i18n.getMessage('by', ['<a href="https://github.com/Julow/StopFlash" target="_blank">repo</a>', 'v0.1.5'])));
 
 	this.setElements(null);
 }
@@ -111,7 +111,7 @@ StopFlashUI.prototype.setElements = function(elements)
 	}
 	else
 	{
-		elementsCount.text('Aucun element trouvé');
+		elementsCount.text(chrome.i18n.getMessage('no_flash_found'));
 	}
 
 	this.whitelistTab.clear()

@@ -6,30 +6,33 @@
 		"message": "StopFlash !"
 	},
 	"by": {
-		"message": "By $1 - $2"
+		"message": "$1 - $2"
 	},
 	"moins_whitelist": {
-		"message": "Retirer cette page de la whitelist"
+		"message": "Remove from whitelist"
 	},
 	"add_whitelist": {
-		"message": "Whitelist this page"
+		"message": "Add to whitelist"
 	},
 	"finds": {
-		"message": "Find $1 elements"
+		"message": "Find $1 objects"
 	},
 	"find": {
-		"message": "Find $1 element"
+		"message": "Find $1 object"
 	},
 	"whitelists": {
-		"message": "$1 whitelisted elements"
+		"message": "$1 items in whitelist"
 	},
 	"whitelist": {
-		"message": "$1 whitelisted element"
+		"message": "$1 item in whitelist"
 	},
 	"unlock": {
 		"message": "Unblock"
 	},
 	"lock": {
 		"message": "Block"
+	},
+	"no_flash_found": {
+		"message": "No object found"
 	}
 }
